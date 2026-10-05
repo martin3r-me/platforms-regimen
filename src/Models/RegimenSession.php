@@ -17,6 +17,25 @@ class RegimenSession extends Model
     public const STATUS_PUBLISHED = 'published';
     public const STATUS_ARCHIVED = 'archived';
 
+    // Art der Lauf-Einheit (treibt Match-Logik & Darstellung).
+    public const KIND_EASY = 'easy';
+    public const KIND_LONG = 'long';
+    public const KIND_TEMPO = 'tempo';
+    public const KIND_INTERVAL = 'interval';
+    public const KIND_RECOVERY = 'recovery';
+    public const KIND_REST = 'rest';
+    public const KIND_RACE = 'race';
+
+    public const KINDS = [
+        self::KIND_EASY => 'Easy Run',
+        self::KIND_LONG => 'Long Run',
+        self::KIND_TEMPO => 'Tempo',
+        self::KIND_INTERVAL => 'Intervalle',
+        self::KIND_RECOVERY => 'Regeneration',
+        self::KIND_REST => 'Ruhetag',
+        self::KIND_RACE => 'Wettkampf',
+    ];
+
     protected $fillable = [
         'uuid',
         'team_id',
@@ -27,9 +46,24 @@ class RegimenSession extends Model
         'summary',
         'content',
         'estimated_minutes',
+        'kind',
+        'target_distance_m',
+        'target_duration_s',
+        'target_pace_s_per_km',
+        'intensity',
+        'structure',
         'status',
         'sort_order',
     ];
+
+    protected $casts = [
+        'structure' => 'array',
+    ];
+
+    public function kindLabel(): ?string
+    {
+        return $this->kind ? (self::KINDS[$this->kind] ?? null) : null;
+    }
 
     protected static function booted(): void
     {

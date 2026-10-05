@@ -36,6 +36,7 @@ class UpdateRegimenPlanTool implements ToolContract, ToolMetadataContract
                 'code' => ['type' => 'string', 'description' => 'Kurs-Code, z.B. "AI-101". Leerstring entfernt den Code.'],
                 'level' => ['type' => 'string', 'enum' => ['beginner', 'intermediate', 'advanced']],
                 'type' => ['type' => 'string', 'enum' => ['running', 'equipment'], 'description' => 'Plan-Typ: running = Laufplan, equipment = Fitnessgeräte-Plan.'],
+                'duration_weeks' => ['type' => 'integer', 'description' => 'Länge des Plans in Wochen.'],
                 'description' => ['type' => 'string'],
                 'target_audience' => ['type' => 'string'],
                 'status' => ['type' => 'string', 'enum' => ['draft', 'published', 'archived']],

@@ -19,6 +19,9 @@ return new class extends Migration
             $table->foreignId('regimen_plan_id')->constrained('regimen_plans')->cascadeOnDelete();
             $table->foreignId('team_id')->constrained('teams')->cascadeOnDelete();
             $table->string('status', 32)->default('active'); // active | completed
+            // Anker-Tag des persönlichen Plans (i.d.R. ein Montag). Aus start_date +
+            // week/weekday werden die datierten regimen_plan_entries materialisiert.
+            $table->date('start_date')->nullable();
             $table->timestamp('enrolled_at')->nullable();
             $table->timestamp('completed_at')->nullable();
             $table->foreignId('last_session_id')->nullable()

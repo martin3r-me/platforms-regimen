@@ -2,6 +2,8 @@
 
 namespace Platform\Regimen\Services;
 
+use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Platform\Regimen\Models\RegimenSession;
 use Platform\Regimen\Models\RegimenPlan;
@@ -42,6 +44,7 @@ class RegimenPlanService
             'color' => $attributes['color'] ?? null,
             'target_audience' => $attributes['target_audience'] ?? null,
             'type' => $this->normalizeType($attributes['type'] ?? null),
+            'duration_weeks' => $attributes['duration_weeks'] ?? null,
             'status' => $attributes['status'] ?? RegimenPlan::STATUS_DRAFT,
             'public' => (bool) ($attributes['public'] ?? false),
             'sort_order' => $attributes['sort_order'] ?? $this->nextSortOrder($teamId),
@@ -52,7 +55,7 @@ class RegimenPlanService
     {
         $data = array_intersect_key($attributes, array_flip([
             'title', 'regimen_category_id', 'level', 'description', 'icon', 'color',
-            'target_audience', 'type', 'status', 'public', 'sort_order',
+            'target_audience', 'type', 'duration_weeks', 'status', 'public', 'sort_order',
         ]));
 
         if (array_key_exists('level', $data)) {
@@ -133,6 +136,39 @@ class RegimenPlanService
     public function detachSession(RegimenPlan $plan, RegimenSession $session): void
     {
         $plan->sessions()->detach($session->id);
+    }
+
+    /**
+     * Legt eine Einheit auf einen Tag im Wochen×7-Raster (week 1..N, weekday 1=Mo..7=So).
+     * Dieselbe Einheit darf an mehreren Tagen liegen; eine bereits an genau diesem Tag
+     * platzierte Einheit wird nur in der sort_order aktualisiert (idempotent).
+     */
+    public function placeSessionOnDay(RegimenPlan $plan, RegimenSession $session, int $week, int $weekday, ?int $sortOrder = null): void
+    {
+        $sortOrder ??= 0;
+
+        $already = DB::table('regimen_plan_sessions')
+            ->where('regimen_plan_id', $plan->id)
+            ->where('regimen_session_id', $session->id)
+            ->where('week', $week)
+            ->where('weekday', $weekday)
+            ->exists();
+
+        if ($already) {
+            DB::table('regimen_plan_sessions')
+                ->where('regimen_plan_id', $plan->id)
+                ->where('regimen_session_id', $session->id)
+                ->where('week', $week)
+                ->where('weekday', $weekday)
+                ->update(['sort_order' => $sortOrder, 'updated_at' => now()]);
+            return;
+        }
+
+        $plan->sessions()->attach($session->id, [
+            'week' => $week,
+            'weekday' => $weekday,
+            'sort_order' => $sortOrder,
+        ]);
     }
 
     public function reorderSessions(RegimenPlan $plan, array $sessionIdsInOrder): void

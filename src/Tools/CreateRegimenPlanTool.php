@@ -34,6 +34,7 @@ class CreateRegimenPlanTool implements ToolContract, ToolMetadataContract
                 'code' => ['type' => 'string', 'description' => 'Kurs-Code, z.B. "AI-101". Wird bei Kollision eindeutig gemacht.'],
                 'level' => ['type' => 'string', 'enum' => ['beginner', 'intermediate', 'advanced'], 'description' => 'Schwierigkeitsgrad.'],
                 'type' => ['type' => 'string', 'enum' => ['running', 'equipment'], 'description' => 'Plan-Typ: running = Laufplan, equipment = Fitnessgeräte-Plan. Default: running.'],
+                'duration_weeks' => ['type' => 'integer', 'description' => 'Länge des Plans in Wochen (treibt das Wochen×7-Raster für Einheiten).'],
                 'description' => ['type' => 'string'],
                 'target_audience' => ['type' => 'string', 'description' => 'z.B. "Sales", "Dev", "Operations".'],
                 'status' => ['type' => 'string', 'enum' => ['draft', 'published', 'archived']],

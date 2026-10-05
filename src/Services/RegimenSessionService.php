@@ -21,6 +21,12 @@ class RegimenSessionService
             'summary' => $attributes['summary'] ?? null,
             'content' => $attributes['content'] ?? null,
             'estimated_minutes' => $attributes['estimated_minutes'] ?? null,
+            'kind' => $attributes['kind'] ?? null,
+            'target_distance_m' => $attributes['target_distance_m'] ?? null,
+            'target_duration_s' => $attributes['target_duration_s'] ?? null,
+            'target_pace_s_per_km' => $attributes['target_pace_s_per_km'] ?? null,
+            'intensity' => $attributes['intensity'] ?? null,
+            'structure' => $attributes['structure'] ?? null,
             'status' => $attributes['status'] ?? RegimenSession::STATUS_DRAFT,
             'sort_order' => $attributes['sort_order'] ?? $this->nextSortOrder($topic->id),
         ]);
@@ -30,6 +36,8 @@ class RegimenSessionService
     {
         $session->fill(array_intersect_key($attributes, array_flip([
             'title', 'summary', 'content', 'estimated_minutes', 'status', 'sort_order',
+            'kind', 'target_distance_m', 'target_duration_s', 'target_pace_s_per_km',
+            'intensity', 'structure',
         ])));
         $session->save();
 

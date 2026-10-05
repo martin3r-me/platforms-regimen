@@ -54,6 +54,7 @@ class RegimenPlan extends Model
         'color',
         'target_audience',
         'type',
+        'duration_weeks',
         'status',
         'public',
         'sort_order',
@@ -90,6 +91,11 @@ class RegimenPlan extends Model
     public function enrollments(): HasMany
     {
         return $this->hasMany(RegimenPlanEnrollment::class, 'regimen_plan_id');
+    }
+
+    public function entries(): HasMany
+    {
+        return $this->hasMany(RegimenPlanEntry::class, 'regimen_plan_id');
     }
 
     public function enrollmentFor(int $userId): ?RegimenPlanEnrollment
@@ -140,8 +146,10 @@ class RegimenPlan extends Model
             'regimen_plan_id',
             'regimen_session_id'
         )
-            ->withPivot('sort_order')
+            ->withPivot(['week', 'weekday', 'sort_order'])
             ->withTimestamps()
+            ->orderBy('regimen_plan_sessions.week')
+            ->orderBy('regimen_plan_sessions.weekday')
             ->orderBy('regimen_plan_sessions.sort_order');
     }
 

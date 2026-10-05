@@ -23,6 +23,8 @@ return new class extends Migration
             $table->string('icon')->nullable();
             $table->string('color', 32)->nullable();
             $table->string('target_audience')->nullable();
+            // Länge des Plan-Templates in Wochen (treibt das Wochen×7-Raster).
+            $table->unsignedSmallInteger('duration_weeks')->nullable();
             $table->string('status', 32)->default('draft');
             $table->unsignedInteger('sort_order')->default(0);
             $table->timestamps();

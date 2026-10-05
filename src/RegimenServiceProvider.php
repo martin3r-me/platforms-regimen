@@ -131,6 +131,8 @@ class RegimenServiceProvider extends ServiceProvider
             $registry->register(new \Platform\Regimen\Tools\AttachSessionToPlanTool());
             $registry->register(new \Platform\Regimen\Tools\DetachSessionFromPlanTool());
             $registry->register(new \Platform\Regimen\Tools\ReorderPlanSessionsTool());
+            $registry->register(new \Platform\Regimen\Tools\AddSessionToPlanDayTool());
+            $registry->register(new \Platform\Regimen\Tools\AssignPlanTool());
 
             // Kurs-Zuweisungen / Pflichtkurse
             $registry->register(new \Platform\Regimen\Tools\CreatePlanAssignmentTool());

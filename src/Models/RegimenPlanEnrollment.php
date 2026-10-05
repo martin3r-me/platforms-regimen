@@ -4,6 +4,7 @@ namespace Platform\Regimen\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Symfony\Component\Uid\UuidV7;
 
 class RegimenPlanEnrollment extends Model
@@ -19,6 +20,7 @@ class RegimenPlanEnrollment extends Model
         'regimen_plan_id',
         'team_id',
         'status',
+        'start_date',
         'enrolled_at',
         'completed_at',
         'last_session_id',
@@ -26,6 +28,7 @@ class RegimenPlanEnrollment extends Model
     ];
 
     protected $casts = [
+        'start_date' => 'date',
         'enrolled_at' => 'datetime',
         'completed_at' => 'datetime',
         'last_activity_at' => 'datetime',
@@ -53,6 +56,13 @@ class RegimenPlanEnrollment extends Model
     public function lastSession(): BelongsTo
     {
         return $this->belongsTo(RegimenSession::class, 'last_session_id');
+    }
+
+    public function entries(): HasMany
+    {
+        return $this->hasMany(RegimenPlanEntry::class, 'regimen_plan_enrollment_id')
+            ->orderBy('scheduled_date')
+            ->orderBy('sort_order');
     }
 
     public function isCompleted(): bool
