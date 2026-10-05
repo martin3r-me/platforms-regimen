@@ -1,0 +1,27 @@
+{
+    "name": "martin3r/platform-regimen",
+    "description": "Regimen Module for Platform — Sport- und Trainingspläne (Laufplan, Fitnessgeräte-Plan, …): Pläne aus Einheiten, an Personen zuweisbar, mit Fortschritt je Einheit.",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Platform Team",
+            "email": "team@platform.com"
+        }
+    ],
+    "require": {},
+    "autoload": {
+        "psr-4": {
+            "Platform\\Regimen\\": "src/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Platform\\Regimen\\RegimenServiceProvider"
+            ]
+        }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}
