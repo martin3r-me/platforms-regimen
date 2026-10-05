@@ -6,6 +6,7 @@ use Illuminate\Support\Collection;
 use Platform\Regimen\Models\RegimenPlanAssignment;
 use Platform\Regimen\Models\RegimenPlan;
 use Platform\Regimen\Models\RegimenUserAssignment;
+use Platform\Regimen\Services\RegimenScheduleService;
 use Platform\Core\Registry\AudienceResolverRegistry;
 use Platform\Notifications\Models\NotificationsNotice;
 use Illuminate\Support\Facades\Route;
@@ -100,6 +101,19 @@ class RegimenAssignmentService
                 'completed_at' => $isDone ? now() : null,
             ]);
 
+            // Datierten persönlichen Plan materialisieren (Garmin-Fläche), sobald ein
+            // Startdatum bekannt ist. Die Zuweisung ist die Quelle des Startdatums,
+            // nicht ein Ad-hoc-Enrollment.
+            if ($rule->starts_at) {
+                $enrollment->start_date = $rule->starts_at;
+                $enrollment->save();
+                app(RegimenScheduleService::class)->materialize($enrollment);
+            }
+
+            // Generische Org-Verknüpfung: Plan an die Person-Entity hängen
+            // (entity-Dimension), damit er in der Org-Draufsicht erscheint.
+            $this->linkPlanToPersonEntity($plan, $userId);
+
             if (!$isDone) {
                 $this->notify($ua, 'assigned');
             }
@@ -135,6 +149,58 @@ class RegimenAssignmentService
                     $ua->save();
                 }
             });
+    }
+
+    /**
+     * Hängt den Plan generisch an die Person-Entity im Org-Baum (entity-Dimension),
+     * damit er in der Org-Draufsicht ("was hängt an Entity Y?") erscheint. Idempotent
+     * (Unique-Constraint). WEICH gekoppelt: ohne Organization-Modul oder ohne
+     * Person-Entity ist es ein No-Op — die Zuweisung scheitert nie daran.
+     */
+    protected function linkPlanToPersonEntity(RegimenPlan $plan, int $userId): void
+    {
+        $entityClass  = \Platform\Organization\Models\OrganizationEntity::class;
+        $defClass     = \Platform\Organization\Models\OrganizationDimensionDefinition::class;
+        $valueClass   = \Platform\Organization\Models\OrganizationDimensionValue::class;
+        $serviceClass = \Platform\Organization\Services\DimensionLinkService::class;
+
+        if (!class_exists($serviceClass) || !class_exists($entityClass)) {
+            return; // Organization-Modul nicht installiert.
+        }
+
+        try {
+            $entity = $entityClass::persons()->linkedToUser($userId)->first();
+            if (!$entity) {
+                return;
+            }
+
+            $def = $defClass::findByKey('entity');
+            if (!$def) {
+                return;
+            }
+
+            $value = $valueClass::where('dimension_definition_id', $def->id)
+                ->where('metadata->source_entity_id', $entity->id)
+                ->first();
+            if (!$value) {
+                return;
+            }
+
+            app($serviceClass)->link(
+                'entity',
+                $plan->getMorphClass(),
+                $plan->id,
+                $value->id,
+                [
+                    'team_id' => $plan->team_id,
+                    'created_by_user_id' => $plan->created_by_user_id,
+                    'is_primary' => false,
+                ],
+            );
+        } catch (\Throwable $e) {
+            // Org-Verlinkung ist optional — nur protokollieren, nicht werfen.
+            report($e);
+        }
     }
 
     /** Neue Mitglieder von team-/org-basierten Regeln nachziehen. */
