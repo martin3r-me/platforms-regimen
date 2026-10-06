@@ -49,6 +49,7 @@ class AssignPlanTool implements ToolContract, ToolMetadataContract
                 'start_date' => ['type' => 'string', 'description' => 'Startdatum (YYYY-MM-DD). Default: heute. Wird auf Montag der Woche gesnappt.'],
                 'due_date' => ['type' => 'string', 'description' => 'Optionales Fälligkeitsdatum (YYYY-MM-DD).'],
                 'is_mandatory' => ['type' => 'boolean', 'description' => 'Pflicht-Zuweisung. Default: false (Selbst-Zuweisung).'],
+                'regenerate' => ['type' => 'boolean', 'description' => 'Bestehenden, noch ungelaufenen persönlichen Plan neu aus dem (ggf. geänderten) Template aufbauen. Absolvierte/gematchte Einheiten bleiben. Nur bei target_type=user.'],
             ],
             'required' => ['plan_id'],
         ];
@@ -112,6 +113,11 @@ class AssignPlanTool implements ToolContract, ToolMetadataContract
                     ->where('regimen_plan_id', $plan->id)
                     ->first();
                 if ($enrollment) {
+                    // Template geändert? Persönlichen Plan auf Wunsch neu aufbauen.
+                    if (!empty($arguments['regenerate'])) {
+                        app(\Platform\Regimen\Services\RegimenScheduleService::class)
+                            ->materialize($enrollment, true);
+                    }
                     $entries = $enrollment->entries()->get(['scheduled_date']);
                     $summary['entries_total'] = $entries->count();
                     $summary['first_date'] = optional($entries->min('scheduled_date'))->toDateString();
