@@ -182,19 +182,21 @@
                     </div>
                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                         @foreach($activePlans as $row)
-                            @php($p = $row['plan'])
+                            @php
+                                $p = $row['plan'];
+                                $href = ($row['dated'] ?? false)
+                                    ? route('regimen.plans.schedule', ['uuid' => $p->uuid])
+                                    : route('regimen.plans.show', ['uuid' => $p->uuid]);
+                            @endphp
                             <div class="rounded-2xl border border-[var(--ui-border)] bg-[var(--ui-surface)] overflow-hidden flex flex-col shadow-sm hover:shadow-md transition-shadow">
-                                <a wire:navigate href="{{ route('regimen.plans.show', ['uuid' => $p->uuid]) }}">
+                                <a wire:navigate href="{{ $href }}">
                                     @include('regimen::partials.plan-cover', ['plan' => $p, 'size' => 'rail'])
                                 </a>
                                 <div class="p-4 flex flex-col gap-2.5 flex-1">
                                     @if($p->category)
                                         <span class="text-[10px] font-semibold uppercase tracking-wider" style="font-family: var(--ui-font-mono); color: {{ $p->coverColor() }};">{{ $p->category->title }}</span>
                                     @endif
-                                    <a wire:navigate href="{{ route('regimen.plans.show', ['uuid' => $p->uuid]) }}" class="font-semibold text-[15px] text-gray-900 dark:text-gray-100 leading-tight hover:text-[var(--ui-primary)] transition-colors">{{ $p->title }}</a>
-                                    @if($row['resume'])
-                                        <div class="text-[12px] text-gray-500 dark:text-gray-400">Weiter bei · <span class="font-medium text-gray-700 dark:text-gray-300">{{ $row['resume']->title }}</span></div>
-                                    @endif
+                                    <a wire:navigate href="{{ $href }}" class="font-semibold text-[15px] text-gray-900 dark:text-gray-100 leading-tight hover:text-[var(--ui-primary)] transition-colors">{{ $p->title }}</a>
                                     <div class="w-full bg-[var(--ui-muted-10)] rounded-full h-1.5 mt-1">
                                         <div class="h-1.5 rounded-full bg-emerald-500" style="width: {{ $row['progress']['pct'] }}%"></div>
                                     </div>
@@ -202,9 +204,9 @@
                                         <span>{{ $row['progress']['completed'] }} / {{ $row['progress']['total'] }} Einheiten</span>
                                         <span>{{ $row['progress']['pct'] }}%</span>
                                     </div>
-                                    <a wire:navigate href="{{ route('regimen.plans.show', ['uuid' => $p->uuid]) }}"
+                                    <a wire:navigate href="{{ $href }}"
                                        class="mt-1 flex items-center justify-center gap-2 w-full px-4 py-2 rounded-lg bg-[var(--ui-primary)] text-white text-[13px] font-semibold hover:opacity-90 transition">
-                                        Weitermachen @svg('heroicon-s-arrow-right', 'w-4 h-4')
+                                        {{ ($row['dated'] ?? false) ? 'Mein Trainingsplan' : 'Weitermachen' }} @svg('heroicon-s-arrow-right', 'w-4 h-4')
                                     </a>
                                 </div>
                             </div>

@@ -21,6 +21,28 @@ class RegimenScheduleService
      *                       Bereits gematchte/absolvierte Einträge bleiben unangetastet.
      * @return int  Anzahl erzeugter Einträge.
      */
+    /** Markiert einen datierten Eintrag als absolviert (pro Occurrence, NICHT pro Session-Template). */
+    public function completeEntry(RegimenPlanEntry $entry): void
+    {
+        $entry->status = RegimenPlanEntry::STATUS_COMPLETED;
+        $entry->completed_at = now();
+        if (!$entry->source) {
+            $entry->source = 'manual';
+        }
+        $entry->save();
+    }
+
+    /** Öffnet einen Eintrag wieder (nur manuell abgeschlossene — gematchte bleiben). */
+    public function reopenEntry(RegimenPlanEntry $entry): void
+    {
+        $entry->status = RegimenPlanEntry::STATUS_PLANNED;
+        $entry->completed_at = null;
+        if ($entry->source === 'manual') {
+            $entry->source = null;
+        }
+        $entry->save();
+    }
+
     public function materialize(RegimenPlanEnrollment $enrollment, bool $force = false): int
     {
         if (!$enrollment->start_date) {

@@ -44,9 +44,24 @@ class Dashboard extends Component
             ->filter(fn ($r) => $r['plan'] !== null)
             ->values();
 
-        // "Meine Regimen" — eingeschriebene Pläne mit Fortschritt + Resume
+        // "Mein Training" — eingeschriebene Pläne mit Fortschritt + Resume
         $enrollmentRows = app(RegimenEnrollmentService::class)->activeForUser($user->id, $teamId);
-        $activePlans = $enrollmentRows->filter(fn ($r) => !$r['enrollment']->isCompleted())->take(6);
+        $activePlans = $enrollmentRows->filter(fn ($r) => !$r['enrollment']->isCompleted())->take(6)
+            ->map(function ($r) {
+                // Datierter Plan? Dann zählt der Fortschritt PRO EINTRAG (nicht pro
+                // Session-Template), damit dieselbe Einheit an mehreren Tagen separat zählt.
+                $total = $r['enrollment']->entries()->count();
+                if ($total > 0) {
+                    $done = $r['enrollment']->entries()
+                        ->where('status', \Platform\Regimen\Models\RegimenPlanEntry::STATUS_COMPLETED)->count();
+                    $r['progress'] = ['total' => $total, 'completed' => $done, 'pct' => (int) round($done / $total * 100)];
+                    $r['dated'] = true;
+                } else {
+                    $r['dated'] = false;
+                }
+                return $r;
+            })
+            ->values();
 
         // Abgeschlossene Pläne + zugehoerige Zertifikate.
         $certService = app(RegimenCertificateService::class);

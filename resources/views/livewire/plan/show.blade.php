@@ -157,12 +157,10 @@
                                 </div>
                             @else
                                 <div class="flex flex-col sm:flex-row sm:items-center gap-4">
-                                    @if($resumeSession)
-                                        <a wire:navigate href="{{ route('regimen.sessions.show', ['uuid' => $resumeSession->uuid]) }}"
-                                           class="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-white text-sm font-bold shadow-md hover:shadow-lg hover:scale-[1.02] transition" style="color: {{ $coverColor }};">
-                                            Weitermachen @svg('heroicon-s-arrow-right', 'w-4 h-4')
-                                        </a>
-                                    @endif
+                                    <a wire:navigate href="{{ route('regimen.plans.schedule', ['uuid' => $plan->uuid]) }}"
+                                       class="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-white text-sm font-bold shadow-md hover:shadow-lg hover:scale-[1.02] transition" style="color: {{ $coverColor }};">
+                                        @svg('heroicon-o-calendar-days', 'w-5 h-5') Mein Trainingsplan
+                                    </a>
                                     <div class="flex-1 max-w-xs">
                                         <div class="flex items-center justify-between text-xs text-white/80 mb-1" style="font-family: var(--ui-font-mono);">
                                             <span>{{ $summary['completed'] }} / {{ $summary['total'] }}</span>
