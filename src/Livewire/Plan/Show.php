@@ -2,10 +2,12 @@
 
 namespace Platform\Regimen\Livewire\Plan;
 
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 use Platform\Regimen\Models\RegimenPlan;
 use Platform\Regimen\Models\RegimenUserAssignment;
+use Platform\Regimen\Services\RegimenAssignmentService;
 use Platform\Regimen\Services\RegimenCertificateService;
 use Platform\Regimen\Services\RegimenEnrollmentService;
 use Platform\Regimen\Services\RegimenProgressService;
@@ -14,16 +16,36 @@ class Show extends Component
 {
     public string $uuid;
 
+    /** Startdatum für „Plan starten" — einmalig gewählt, treibt den datierten Plan. */
+    public string $startDate = '';
+
     public function mount(string $uuid): void
     {
         $this->uuid = $uuid;
+        // Default: nächster Montag (sauberer Wochenstart).
+        $this->startDate = Carbon::now()->next(Carbon::MONDAY)->toDateString();
     }
 
-    public function enroll(): void
+    public function enroll()
     {
         $user = Auth::user();
         $plan = $this->resolvePlan($user);
-        app(RegimenEnrollmentService::class)->enroll($user->id, $plan);
+
+        try {
+            $start = Carbon::parse($this->startDate)->toDateString();
+        } catch (\Throwable $e) {
+            $start = Carbon::today()->toDateString();
+        }
+
+        // Selbst-Start läuft über denselben Weg wie die Zuweisung: erzeugt
+        // Enrollment, Startdatum, den datierten persönlichen Plan (materialize)
+        // und den Org-Link — alles konsistent.
+        app(RegimenAssignmentService::class)->assign(
+            $plan, 'user', (int) $user->id, [], (int) $user->id,
+            ['is_mandatory' => false, 'starts_at' => $start],
+        );
+
+        return $this->redirect(route('regimen.plans.schedule', ['uuid' => $plan->uuid]), navigate: true);
     }
 
     public function drop(): void

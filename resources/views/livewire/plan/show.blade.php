@@ -173,10 +173,18 @@
                                 </div>
                             @endif
                         @else
-                            <button wire:click="enroll"
-                                    class="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-white text-sm font-bold shadow-md hover:shadow-lg hover:scale-[1.02] transition" style="color: {{ $coverColor }};">
-                                @svg('heroicon-o-plus', 'w-5 h-5') Plan starten
-                            </button>
+                            <div class="flex flex-col sm:flex-row sm:items-center gap-3">
+                                <div class="inline-flex items-center gap-2 bg-white/15 backdrop-blur rounded-xl px-3 py-2.5">
+                                    <label class="text-xs font-semibold text-white/90" style="font-family: var(--ui-font-mono);">Start</label>
+                                    <input type="date" wire:model="startDate"
+                                           class="bg-transparent text-white text-sm border-0 focus:ring-0 p-0 [color-scheme:dark]" />
+                                </div>
+                                <button wire:click="enroll"
+                                        class="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-white text-sm font-bold shadow-md hover:shadow-lg hover:scale-[1.02] transition" style="color: {{ $coverColor }};">
+                                    @svg('heroicon-o-play', 'w-5 h-5') Plan starten
+                                </button>
+                            </div>
+                            <p class="mt-2 text-xs text-white/70">Ab dem Startdatum wird dein persönlicher, datierter Trainingsplan erzeugt. Start wird auf den Montag der Woche gelegt.</p>
                         @endif
                     </div>
                 </div>

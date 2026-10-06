@@ -2,7 +2,7 @@
 
 return [
     'routing' => [
-        'mode' => env('REGIMEN_MODE', 'plan'),
+        'mode' => env('REGIMEN_MODE', 'path'),
         'prefix' => 'regimen',
     ],
 
