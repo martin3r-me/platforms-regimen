@@ -6,7 +6,7 @@
 
     <x-slot name="actionbar">
         <x-ui-page-actionbar :breadcrumbs="[
-            ['label' => 'Regimen', 'href' => route('regimen.dashboard'), 'icon' => 'academic-cap'],
+            ['label' => 'Regimen', 'href' => route('regimen.dashboard'), 'icon' => 'bolt'],
             ['label' => 'Bibliothek', 'href' => route('regimen.topics.index')],
             ['label' => $topic->title, 'href' => route('regimen.topics.show', ['uuid' => $topic->uuid])],
         ]">
@@ -19,7 +19,7 @@
     </x-slot>
 
     <x-slot name="sidebar">
-        <x-ui-page-sidebar title="Lektionen" icon="heroicon-o-list-bullet" width="w-72" :defaultOpen="true">
+        <x-ui-page-sidebar title="Einheiten" icon="heroicon-o-list-bullet" width="w-72" :defaultOpen="true">
             <nav class="p-3 space-y-1">
                 @forelse($sessions as $i => $session)
                     @php($isDone = isset($completedSet[$session->id]))
@@ -31,7 +31,7 @@
                         <span class="flex-1 truncate">{{ $session->title }}</span>
                     </a>
                 @empty
-                    <div class="px-3 py-2 text-xs text-gray-400">Noch keine Lektionen.</div>
+                    <div class="px-3 py-2 text-xs text-gray-400">Noch keine Einheiten.</div>
                 @endforelse
             </nav>
         </x-ui-page-sidebar>
@@ -93,7 +93,7 @@
 
             @if($sessions->isEmpty())
                 <div class="p-6 text-center rounded-2xl border border-[var(--ui-border)] bg-[var(--ui-muted-5)] text-gray-500 dark:text-gray-400">
-                    Noch keine veröffentlichten Lektionen in diesem Thema.
+                    Noch keine veröffentlichten Einheiten in diesem Thema.
                 </div>
             @else
                 <ol class="divide-y divide-[var(--ui-border)] border-y border-[var(--ui-border)]">

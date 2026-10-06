@@ -11,7 +11,7 @@ use Platform\Regimen\Models\RegimenPlanEnrollment;
 class RegimenEnrollmentService
 {
     /**
-     * Schreibt einen User bewusst in einen Kurs (Plan) ein. Idempotent.
+     * Schreibt einen User bewusst in einen Plan (Plan) ein. Idempotent.
      */
     public function enroll(int $userId, RegimenPlan $plan): RegimenPlanEnrollment
     {
@@ -32,7 +32,7 @@ class RegimenEnrollmentService
     }
 
     /**
-     * Beendet die Einschreibung ("Kurs verlassen"). Der Session-Fortschritt bleibt erhalten.
+     * Beendet die Einschreibung ("Plan verlassen"). Der Session-Fortschritt bleibt erhalten.
      */
     public function drop(int $userId, RegimenPlan $plan): void
     {
@@ -106,7 +106,7 @@ class RegimenEnrollmentService
     }
 
     /**
-     * Aktualisiert den Resume-Punkt fuer alle Kurse, in die der User eingeschrieben
+     * Aktualisiert den Resume-Punkt fuer alle Pläne, in die der User eingeschrieben
      * ist und die diese Session enthalten. Wird beim Oeffnen einer Session aufgerufen.
      */
     public function touch(int $userId, RegimenSession $session): void
@@ -125,7 +125,7 @@ class RegimenEnrollmentService
     }
 
     /**
-     * Prueft nach Abschluss einer Session, ob dadurch ein eingeschriebener Kurs
+     * Prueft nach Abschluss einer Session, ob dadurch ein eingeschriebener Plan
      * vollstaendig wurde, und markiert die Einschreibung ggf. als abgeschlossen.
      */
     public function syncCompletion(int $userId, RegimenSession $session): void
@@ -160,16 +160,16 @@ class RegimenEnrollmentService
             $enrollment->completed_at = now();
             $enrollment->save();
 
-            // Kurs vollstaendig -> Zertifikat ausstellen (idempotent).
+            // Plan vollstaendig -> Zertifikat ausstellen (idempotent).
             app(RegimenCertificateService::class)->issueIfComplete($enrollment->user_id, $plan);
         } elseif (!$isComplete && $enrollment->isCompleted()) {
-            // Kurs wurde erweitert oder Session wieder geoeffnet -> zurueck auf aktiv.
+            // Plan wurde erweitert oder Session wieder geoeffnet -> zurueck auf aktiv.
             $enrollment->status = RegimenPlanEnrollment::STATUS_ACTIVE;
             $enrollment->completed_at = null;
             $enrollment->save();
         }
 
-        // Pflichtkurs-Zuweisungen (falls vorhanden) synchron zum Fortschritt halten.
+        // Pflichtplan-Zuweisungen (falls vorhanden) synchron zum Fortschritt halten.
         app(RegimenAssignmentService::class)->syncPlanCompletion($enrollment->user_id, $plan, $isComplete);
     }
 

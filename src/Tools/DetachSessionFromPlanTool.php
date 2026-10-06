@@ -22,7 +22,7 @@ class DetachSessionFromPlanTool implements ToolContract, ToolMetadataContract
 
     public function getDescription(): string
     {
-        return 'POST /regimen/plans/sessions/detach - Entfernt eine Session aus einem Lernpfad (Session selbst bleibt erhalten).';
+        return 'POST /regimen/plans/sessions/detach - Entfernt eine Session aus einem Plan (Session selbst bleibt erhalten).';
     }
 
     public function getSchema(): array
@@ -45,7 +45,7 @@ class DetachSessionFromPlanTool implements ToolContract, ToolMetadataContract
             if ($resolved['error']) return $resolved['error'];
 
             $plan = RegimenPlan::where('team_id', $resolved['team_id'])->find((int) ($arguments['plan_id'] ?? 0));
-            if (!$plan) return ToolResult::error('NOT_FOUND', 'Lernpfad nicht gefunden.');
+            if (!$plan) return ToolResult::error('NOT_FOUND', 'Plan nicht gefunden.');
 
             $session = RegimenSession::where('team_id', $resolved['team_id'])->find((int) ($arguments['session_id'] ?? 0));
             if (!$session) return ToolResult::error('NOT_FOUND', 'Session nicht gefunden.');

@@ -20,7 +20,7 @@ class CreateRegimenPlanTool implements ToolContract, ToolMetadataContract
 
     public function getDescription(): string
     {
-        return 'POST /regimen/plans - Erstellt einen neuen Lernpfad (kuratierte Session-Reihenfolge). Sessions werden separat via attach hinzugefuegt.';
+        return 'POST /regimen/plans - Erstellt einen neuen Plan (kuratierte Session-Reihenfolge). Sessions werden separat via attach hinzugefuegt.';
     }
 
     public function getSchema(): array
@@ -30,17 +30,17 @@ class CreateRegimenPlanTool implements ToolContract, ToolMetadataContract
             'properties' => [
                 'team_id' => ['type' => 'integer'],
                 'title' => ['type' => 'string'],
-                'regimen_category_id' => ['type' => 'integer', 'description' => 'Kategorie/"School" des Kurses (bestimmt Cover-Farbe).'],
-                'code' => ['type' => 'string', 'description' => 'Kurs-Code, z.B. "AI-101". Wird bei Kollision eindeutig gemacht.'],
+                'regimen_category_id' => ['type' => 'integer', 'description' => 'Kategorie/"Disziplin" des Plans (bestimmt Cover-Farbe).'],
+                'code' => ['type' => 'string', 'description' => 'Plan-Code, z.B. "AI-101". Wird bei Kollision eindeutig gemacht.'],
                 'level' => ['type' => 'string', 'enum' => ['beginner', 'intermediate', 'advanced'], 'description' => 'Schwierigkeitsgrad.'],
                 'type' => ['type' => 'string', 'enum' => ['running', 'equipment'], 'description' => 'Plan-Typ: running = Laufplan, equipment = Fitnessgeräte-Plan. Default: running.'],
                 'duration_weeks' => ['type' => 'integer', 'description' => 'Länge des Plans in Wochen (treibt das Wochen×7-Raster für Einheiten).'],
                 'description' => ['type' => 'string'],
                 'target_audience' => ['type' => 'string', 'description' => 'z.B. "Sales", "Dev", "Operations".'],
                 'status' => ['type' => 'string', 'enum' => ['draft', 'published', 'archived']],
-                'public' => ['type' => 'boolean', 'description' => 'Website-Freigabe. Nur Kurse mit status=published UND public=true werden über die Public Plan API ausgeliefert. Default: false.'],
+                'public' => ['type' => 'boolean', 'description' => 'Website-Freigabe. Nur Pläne mit status=published UND public=true werden über die Public Plan API ausgeliefert. Default: false.'],
                 'icon' => ['type' => 'string'],
-                'color' => ['type' => 'string', 'description' => 'Optionaler Cover-Farb-Override (Hex). Sonst erbt der Kurs die Kategorie-Farbe.'],
+                'color' => ['type' => 'string', 'description' => 'Optionaler Cover-Farb-Override (Hex). Sonst erbt der Plan die Kategorie-Farbe.'],
                 'slug' => ['type' => 'string'],
                 'sort_order' => ['type' => 'integer'],
             ],
@@ -76,7 +76,7 @@ class CreateRegimenPlanTool implements ToolContract, ToolMetadataContract
                 'regimen_category_id' => $plan->regimen_category_id,
                 'status' => $plan->status,
                 'public' => $plan->public,
-                'message' => "Lernpfad '{$plan->title}' erstellt (Status: {$plan->status}).",
+                'message' => "Plan '{$plan->title}' erstellt (Status: {$plan->status}).",
             ]);
         } catch (\Throwable $e) {
             return ToolResult::error('EXECUTION_ERROR', 'Fehler: ' . $e->getMessage());

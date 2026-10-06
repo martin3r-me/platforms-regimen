@@ -23,7 +23,7 @@ class UpsertRegimenQuizTool implements ToolContract, ToolMetadataContract
 
     public function getDescription(): string
     {
-        return 'POST /regimen/quizzes/upsert - Legt den Concept-Check (Quiz) einer Lektion an oder ersetzt ihn komplett. ERFORDERLICH: session_id, questions[]. Jede Frage: type (single|multiple), prompt (Markdown), optional explanation, options[] mit label + is_correct. Optional: title, pass_pct (Default 70), shuffle_questions. Ein Quiz pro Lektion; besteht der Lernende es, gilt die Lektion als abgeschlossen.' . $this->appletDoc();
+        return 'POST /regimen/quizzes/upsert - Legt den Concept-Check (Quiz) einer Einheit an oder ersetzt ihn komplett. ERFORDERLICH: session_id, questions[]. Jede Frage: type (single|multiple), prompt (Markdown), optional explanation, options[] mit label + is_correct. Optional: title, pass_pct (Default 70), shuffle_questions. Ein Quiz pro Einheit; besteht der Lernende es, gilt die Einheit als abgeschlossen.' . $this->appletDoc();
     }
 
     public function getSchema(): array

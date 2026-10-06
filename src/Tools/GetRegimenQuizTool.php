@@ -20,7 +20,7 @@ class GetRegimenQuizTool implements ToolContract, ToolMetadataContract
 
     public function getDescription(): string
     {
-        return 'GET /regimen/quiz - Liefert den Concept-Check (Quiz) einer Lektion inkl. Fragen, Optionen und Loesungsschluessel. Identifikation per session_id.';
+        return 'GET /regimen/quiz - Liefert den Concept-Check (Quiz) einer Einheit inkl. Fragen, Optionen und Loesungsschluessel. Identifikation per session_id.';
     }
 
     public function getSchema(): array
@@ -54,7 +54,7 @@ class GetRegimenQuizTool implements ToolContract, ToolMetadataContract
                 return ToolResult::success([
                     'session_id' => $session->id,
                     'quiz' => null,
-                    'message' => 'Diese Lektion hat noch keinen Concept-Check.',
+                    'message' => 'Diese Einheit hat noch keinen Concept-Check.',
                 ]);
             }
 

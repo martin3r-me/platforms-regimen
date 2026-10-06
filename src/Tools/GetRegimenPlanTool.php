@@ -20,7 +20,7 @@ class GetRegimenPlanTool implements ToolContract, ToolMetadataContract
 
     public function getDescription(): string
     {
-        return 'GET /regimen/plan - Liefert einen Lernpfad inkl. zugeordneter Sessions in Reihenfolge.';
+        return 'GET /regimen/plan - Liefert einen Plan inkl. zugeordneter Sessions in Reihenfolge.';
     }
 
     public function getSchema(): array
@@ -52,7 +52,7 @@ class GetRegimenPlanTool implements ToolContract, ToolMetadataContract
 
             $plan = $query->first();
             if (!$plan) {
-                return ToolResult::error('NOT_FOUND', 'Lernpfad nicht gefunden.');
+                return ToolResult::error('NOT_FOUND', 'Plan nicht gefunden.');
             }
 
             $sessions = $plan->sessions()->with('topic:id,uuid,title')->get();

@@ -30,7 +30,7 @@ class Show extends Component
         $user = Auth::user();
         $session = $this->resolveSession($user);
 
-        // Manueller Abschluss nur fuer Lektionen ohne Concept-Check.
+        // Manueller Abschluss nur fuer Einheiten ohne Concept-Check.
         if ($session->quiz()->exists()) {
             return;
         }
@@ -85,7 +85,7 @@ class Show extends Component
             app(RegimenProgressService::class)->start($user->id, $session);
         }
 
-        // Resume-Punkt fuer eingeschriebene Kurse mitziehen.
+        // Resume-Punkt fuer eingeschriebene Pläne mitziehen.
         app(RegimenEnrollmentService::class)->touch($user->id, $session);
     }
 
@@ -101,7 +101,7 @@ class Show extends Component
         $markdown = app(RegimenMarkdownService::class);
         $renderedContent = $markdown->render($session->content);
 
-        // Concept-Check dieser Lektion (optional). Existiert er, gatet er den Abschluss.
+        // Concept-Check dieser Einheit (optional). Existiert er, gatet er den Abschluss.
         $quiz = $session->quiz()->with('questions.options')->first();
         $quizQuestions = [];
         if ($quiz && $quiz->questions->isNotEmpty()) {
@@ -144,7 +144,7 @@ class Show extends Component
             ->get();
 
         // Prev/Next folgen dem KURS (Plan), damit die Navigation ueber Themen-/Kapitel-
-        // grenzen hinweg funktioniert. Ohne Kurs-Kontext (reines Bibliotheks-Stoebern)
+        // grenzen hinweg funktioniert. Ohne Plan-Kontext (reines Bibliotheks-Stoebern)
         // bleibt es themenintern.
         $primaryPlan = $planMemberships->first();
         $sequence = $primaryPlan
@@ -154,8 +154,8 @@ class Show extends Component
                 ->get(['regimen_sessions.id', 'regimen_sessions.uuid', 'regimen_sessions.title', 'regimen_sessions.regimen_topic_id'])
             : null;
 
-        // Fallback auf die themeninterne Reihenfolge, wenn kein Kurs existiert oder die
-        // Lektion (unerwartet) nicht in der Kurs-Sequenz liegt.
+        // Fallback auf die themeninterne Reihenfolge, wenn kein Plan existiert oder die
+        // Einheit (unerwartet) nicht in der Plan-Sequenz liegt.
         if (!$sequence || $sequence->search(fn ($l) => $l->id === $session->id) === false) {
             $sequence = $topicSessions;
         }
@@ -164,11 +164,11 @@ class Show extends Component
         $prev = $currentIndex !== false && $currentIndex > 0 ? $sequence[$currentIndex - 1] : null;
         $next = $currentIndex !== false && $currentIndex < $sequence->count() - 1 ? $sequence[$currentIndex + 1] : null;
 
-        // Wechselt die naechste Lektion das Thema, ist es ein neues Kapitel.
+        // Wechselt die naechste Einheit das Thema, ist es ein neues Kapitel.
         $nextIsNewChapter = $next && isset($next->regimen_topic_id) && $next->regimen_topic_id !== $session->regimen_topic_id;
         $nextChapterTitle = $nextIsNewChapter ? ($next->topic?->title) : null;
 
-        // Akzentfarbe des Hero: erbt die Farbe des Kurses (sonst Thema-Farbe, sonst Indigo).
+        // Akzentfarbe des Hero: erbt die Farbe des Plans (sonst Thema-Farbe, sonst Indigo).
         $accentColor = $planMemberships->isNotEmpty()
             ? $planMemberships->first()->coverColor()
             : (($session->topic->color && str_starts_with($session->topic->color, '#')) ? $session->topic->color : '#4F46E5');

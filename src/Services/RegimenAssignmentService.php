@@ -12,7 +12,7 @@ use Platform\Notifications\Models\NotificationsNotice;
 use Illuminate\Support\Facades\Route;
 
 /**
- * Kern der Kurs-Delegation / Pflichtkurse. Entkoppelt: die Ziel-Auflösung
+ * Kern der Plan-Delegation / Pflichtpläne. Entkoppelt: die Ziel-Auflösung
  * ("wer steckt hinter target_type/target_id?") läuft über die
  * AudienceResolverRegistry im Core — kein Wissen über Organisation o.Ä.
  */
@@ -126,7 +126,7 @@ class RegimenAssignmentService
     }
 
     /**
-     * Wird bei Kurs-Abschluss/-Reaktivierung aufgerufen (Hook im EnrollmentService).
+     * Wird bei Plan-Abschluss/-Reaktivierung aufgerufen (Hook im EnrollmentService).
      * Hält die pro-Person-Zuweisungen synchron zum Fortschritt.
      */
     public function syncPlanCompletion(int $userId, RegimenPlan $plan, bool $isCompleted): void
@@ -266,7 +266,7 @@ class RegimenAssignmentService
     }
 
     /**
-     * Pflichtkurse eines Users mit Status + Fortschritt — Kontrakt für die
+     * Pflichtpläne eines Users mit Status + Fortschritt — Kontrakt für die
      * persönliche Sicht (home). Überfällig zuerst, dann offen, dann erledigt.
      *
      * @return array<int, array{plan_uuid:?string, title:string, status:string, is_completed:bool, is_overdue:bool, due_at:?string, progress_pct:int}>
@@ -286,7 +286,7 @@ class RegimenAssignmentService
 
                 return [
                     'plan_uuid'    => $plan?->uuid,
-                    'title'        => $plan?->title ?? 'Kurs',
+                    'title'        => $plan?->title ?? 'Plan',
                     'url'          => ($plan?->uuid && Route::has('regimen.plans.show'))
                         ? route('regimen.plans.show', ['uuid' => $plan->uuid])
                         : null,
@@ -349,19 +349,19 @@ class RegimenAssignmentService
     public function notify(RegimenUserAssignment $ua, string $kind): void
     {
         $plan = $ua->plan;
-        $planTitle = $plan?->title ?? 'Kurs';
+        $planTitle = $plan?->title ?? 'Plan';
         $due = $ua->due_at ? $ua->due_at->format('d.m.Y') : null;
 
         $title = match ($kind) {
-            'assigned' => ($ua->is_mandatory ? 'Neuer Pflichtkurs: ' : 'Neuer Kurs für dich: ') . $planTitle,
+            'assigned' => ($ua->is_mandatory ? 'Neuer Pflichtplan: ' : 'Neuer Plan für dich: ') . $planTitle,
             'due_soon' => 'Erinnerung: ' . $planTitle . ' wird fällig',
             'overdue' => 'Überfällig: ' . $planTitle,
             default => $planTitle,
         };
 
         $message = $ua->is_mandatory
-            ? 'Dieser Kurs ist für dich verpflichtend.' . ($due ? ' Fällig bis ' . $due . '.' : '')
-            : 'Dieser Kurs wurde dir empfohlen.' . ($due ? ' Bis ' . $due . '.' : '');
+            ? 'Dieser Plan ist für dich verpflichtend.' . ($due ? ' Fällig bis ' . $due . '.' : '')
+            : 'Dieser Plan wurde dir empfohlen.' . ($due ? ' Bis ' . $due . '.' : '');
 
         NotificationsNotice::create([
             'notice_type' => 'regimen_assignment_' . $kind,

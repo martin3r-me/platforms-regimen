@@ -15,7 +15,7 @@ class Index extends Component
         $this->dispatch('comms', [
             'model' => null, 'modelId' => null,
             'subject' => 'Regimen: Themen',
-            'description' => 'Bibliothek — alle Lektionen nach Thema',
+            'description' => 'Bibliothek — alle Einheiten nach Thema',
             'url' => route('regimen.topics.index'),
             'source' => 'regimen.topics.index',
             'recipients' => [],
@@ -30,7 +30,7 @@ class Index extends Component
 
         $topics = app(RegimenTopicService::class)->listForTeam($teamId);
 
-        // Fortschritt pro Thema (abgeschlossene veröffentlichte Lektionen).
+        // Fortschritt pro Thema (abgeschlossene veröffentlichte Einheiten).
         $sessionRows = RegimenSession::query()
             ->where('team_id', $teamId)
             ->where('status', RegimenSession::STATUS_PUBLISHED)
@@ -52,7 +52,7 @@ class Index extends Component
             $topic->setAttribute('progress_pct', $total > 0 ? (int) round($done / $total * 100) : 0);
         }
 
-        // Leere Autoren-Themen (0 veröffentlichte Lektionen) für Lernende ausblenden.
+        // Leere Autoren-Themen (0 veröffentlichte Einheiten) für Lernende ausblenden.
         $topics = $topics->filter(fn ($topic) => $topic->session_total > 0)->values();
 
         return view('regimen::livewire.topic.index', [

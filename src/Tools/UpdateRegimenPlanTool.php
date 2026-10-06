@@ -21,7 +21,7 @@ class UpdateRegimenPlanTool implements ToolContract, ToolMetadataContract
 
     public function getDescription(): string
     {
-        return 'PUT /regimen/plans - Aktualisiert einen Lernpfad. ERFORDERLICH: plan_id.';
+        return 'PUT /regimen/plans - Aktualisiert einen Plan. ERFORDERLICH: plan_id.';
     }
 
     public function getSchema(): array
@@ -32,15 +32,15 @@ class UpdateRegimenPlanTool implements ToolContract, ToolMetadataContract
                 'team_id' => ['type' => 'integer'],
                 'plan_id' => ['type' => 'integer'],
                 'title' => ['type' => 'string'],
-                'regimen_category_id' => ['type' => 'integer', 'description' => 'Kategorie/"School" des Kurses.'],
-                'code' => ['type' => 'string', 'description' => 'Kurs-Code, z.B. "AI-101". Leerstring entfernt den Code.'],
+                'regimen_category_id' => ['type' => 'integer', 'description' => 'Kategorie/"Disziplin" des Plans.'],
+                'code' => ['type' => 'string', 'description' => 'Plan-Code, z.B. "AI-101". Leerstring entfernt den Code.'],
                 'level' => ['type' => 'string', 'enum' => ['beginner', 'intermediate', 'advanced']],
                 'type' => ['type' => 'string', 'enum' => ['running', 'equipment'], 'description' => 'Plan-Typ: running = Laufplan, equipment = Fitnessgeräte-Plan.'],
                 'duration_weeks' => ['type' => 'integer', 'description' => 'Länge des Plans in Wochen.'],
                 'description' => ['type' => 'string'],
                 'target_audience' => ['type' => 'string'],
                 'status' => ['type' => 'string', 'enum' => ['draft', 'published', 'archived']],
-                'public' => ['type' => 'boolean', 'description' => 'Website-Freigabe. Nur Kurse mit status=published UND public=true werden über die Public Plan API ausgeliefert.'],
+                'public' => ['type' => 'boolean', 'description' => 'Website-Freigabe. Nur Pläne mit status=published UND public=true werden über die Public Plan API ausgeliefert.'],
                 'icon' => ['type' => 'string'],
                 'color' => ['type' => 'string', 'description' => 'Cover-Farb-Override (Hex).'],
                 'sort_order' => ['type' => 'integer'],
@@ -58,7 +58,7 @@ class UpdateRegimenPlanTool implements ToolContract, ToolMetadataContract
             $planId = (int) ($arguments['plan_id'] ?? 0);
             $plan = RegimenPlan::where('team_id', $resolved['team_id'])->find($planId);
             if (!$plan) {
-                return ToolResult::error('NOT_FOUND', 'Lernpfad nicht gefunden.');
+                return ToolResult::error('NOT_FOUND', 'Plan nicht gefunden.');
             }
 
             $plan = app(RegimenPlanService::class)->update($plan, $arguments);
@@ -70,7 +70,7 @@ class UpdateRegimenPlanTool implements ToolContract, ToolMetadataContract
                 'type' => $plan->type,
                 'status' => $plan->status,
                 'public' => $plan->public,
-                'message' => "Lernpfad aktualisiert.",
+                'message' => "Plan aktualisiert.",
             ]);
         } catch (\Throwable $e) {
             return ToolResult::error('EXECUTION_ERROR', 'Fehler: ' . $e->getMessage());

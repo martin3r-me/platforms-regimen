@@ -22,7 +22,7 @@ class ListPlanAssignmentsTool implements ToolContract, ToolMetadataContract
 
     public function getDescription(): string
     {
-        return 'GET /regimen/assignments - Listet die Kurs-Zuweisungen (Delegations-Regeln) eines Teams inkl. Compliance-Quote (zugewiesen / abgeschlossen / ueberfaellig). Optional filtern: plan_id, status (active|archived).';
+        return 'GET /regimen/assignments - Listet die Plan-Zuweisungen (Delegations-Regeln) eines Teams inkl. Compliance-Quote (zugewiesen / abgeschlossen / ueberfaellig). Optional filtern: plan_id, status (active|archived).';
     }
 
     public function getSchema(): array

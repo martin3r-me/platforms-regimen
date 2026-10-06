@@ -1,6 +1,6 @@
 @php
     /**
-     * Typografischer Kurs-Cover: Kurs-Code auf kategorie-getoentem Verlauf.
+     * Typografischer Plan-Cover: Plan-Code auf kategorie-getoentem Verlauf.
      * Erwartet: $plan. Optional: $size ('card' | 'rail' | 'hero').
      */
     $size = $size ?? 'card';

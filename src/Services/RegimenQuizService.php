@@ -11,7 +11,7 @@ use Platform\Regimen\Models\RegimenQuizQuestion;
 class RegimenQuizService
 {
     /**
-     * Legt den Concept-Check einer Lektion an oder ersetzt ihn vollstaendig.
+     * Legt den Concept-Check einer Einheit an oder ersetzt ihn vollstaendig.
      * Fragen und Optionen werden bei jedem Upsert neu geschrieben (idempotent
      * gegen das uebergebene JSON), damit das Autoren-Tool die Quelle der Wahrheit ist.
      *
@@ -109,7 +109,7 @@ class RegimenQuizService
 
     /**
      * Bewertet, protokolliert den Versuch und schliesst — bei Bestehen —
-     * die zugehoerige Lektion ab (Gating).
+     * die zugehoerige Einheit ab (Gating).
      *
      * @param  array<int, array<int, int>>  $answers
      * @return array{attempt: RegimenQuizAttempt, result: array}

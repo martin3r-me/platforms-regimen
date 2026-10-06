@@ -52,7 +52,7 @@ class Show extends Component
 
         $certificate = app(RegimenCertificateService::class)->forUserPlan($user->id, $plan);
 
-        // Offene Zuweisung dieses Users für diesen Kurs (für den Pflicht-Banner).
+        // Offene Zuweisung dieses Users für diesen Plan (für den Pflicht-Banner).
         // Das Zuweisen selbst passiert per MCP (regimen.assignments.*), nicht in der UI.
         $assignment = RegimenUserAssignment::where('user_id', $user->id)
             ->where('regimen_plan_id', $plan->id)

@@ -22,7 +22,7 @@ class UpdatePlanAssignmentTool implements ToolContract, ToolMetadataContract
 
     public function getDescription(): string
     {
-        return 'PUT /regimen/assignments - Aendert eine Kurs-Zuweisung. ERFORDERLICH: assignment_id. Optional: due_at (YYYY-MM-DD), is_mandatory, note, status (active|archived). Deadline/Pflicht werden auf offene pro-Person-Zuweisungen uebernommen. status=archived widerruft die Zuweisung (Enrollment/Fortschritt bleiben).';
+        return 'PUT /regimen/assignments - Aendert eine Plan-Zuweisung. ERFORDERLICH: assignment_id. Optional: due_at (YYYY-MM-DD), is_mandatory, note, status (active|archived). Deadline/Pflicht werden auf offene pro-Person-Zuweisungen uebernommen. status=archived widerruft die Zuweisung (Enrollment/Fortschritt bleiben).';
     }
 
     public function getSchema(): array

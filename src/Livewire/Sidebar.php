@@ -18,7 +18,7 @@ class Sidebar extends Component
             return view('regimen::livewire.sidebar', ['plans' => collect(), 'assignments' => collect()]);
         }
 
-        // Nur abonnierte Kurse — sortiert nach letzter Aktivität.
+        // Nur abonnierte Pläne — sortiert nach letzter Aktivität.
         $plans = app(RegimenEnrollmentService::class)
             ->activeForUser($user->id, $user->currentTeam->id)
             ->map(fn ($row) => [
@@ -30,7 +30,7 @@ class Sidebar extends Component
             ])
             ->take(8);
 
-        // Offene Pflicht-/zugewiesene Kurse — nach Deadline sortiert (siehe openForUser).
+        // Offene Pflicht-/zugewiesene Pläne — nach Deadline sortiert (siehe openForUser).
         $assignments = app(RegimenAssignmentService::class)
             ->openForUser($user->id, $user->currentTeam->id)
             ->map(fn ($ua) => [

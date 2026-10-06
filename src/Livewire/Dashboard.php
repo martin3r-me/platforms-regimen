@@ -21,7 +21,7 @@ class Dashboard extends Component
             'model' => null,
             'modelId' => null,
             'subject' => 'Regimen Dashboard',
-            'description' => 'Übersicht aller Kurse, Kategorien und Lernfortschritt',
+            'description' => 'Übersicht aller Pläne, Kategorien und Trainingsfortschritt',
             'url' => route('regimen.dashboard'),
             'source' => 'regimen.dashboard',
             'recipients' => [],
@@ -34,7 +34,7 @@ class Dashboard extends Component
         $user = Auth::user();
         $teamId = $user?->currentTeam?->id;
 
-        // Zugewiesene / Pflichtkurse (offen), nach Deadline sortiert.
+        // Zugewiesene / Pflichtpläne (offen), nach Deadline sortiert.
         $assignments = app(RegimenAssignmentService::class)->openForUser($user->id, $teamId)
             ->map(fn ($ua) => [
                 'ua' => $ua,
@@ -44,11 +44,11 @@ class Dashboard extends Component
             ->filter(fn ($r) => $r['plan'] !== null)
             ->values();
 
-        // "Meine Regimen" — eingeschriebene Kurse mit Fortschritt + Resume
+        // "Meine Regimen" — eingeschriebene Pläne mit Fortschritt + Resume
         $enrollmentRows = app(RegimenEnrollmentService::class)->activeForUser($user->id, $teamId);
         $activePlans = $enrollmentRows->filter(fn ($r) => !$r['enrollment']->isCompleted())->take(6);
 
-        // Abgeschlossene Kurse + zugehoerige Zertifikate.
+        // Abgeschlossene Pläne + zugehoerige Zertifikate.
         $certService = app(RegimenCertificateService::class);
         $completedPlans = $enrollmentRows
             ->filter(fn ($r) => $r['enrollment']->isCompleted())
@@ -63,7 +63,7 @@ class Dashboard extends Component
         // Kategorien für den Katalog-Filter
         $categories = app(RegimenCategoryService::class)->listForTeam($teamId);
 
-        // "Kurse entdecken" — veröffentlichte Kurse, in die man noch nicht eingeschrieben ist
+        // "Pläne entdecken" — veröffentlichte Pläne, in die man noch nicht eingeschrieben ist
         $discover = RegimenPlan::query()
             ->where('team_id', $teamId)
             ->where('status', RegimenPlan::STATUS_PUBLISHED)

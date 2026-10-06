@@ -6,7 +6,7 @@
 
     <x-slot name="actionbar">
         <x-ui-page-actionbar :breadcrumbs="[
-            ['label' => 'Regimen', 'href' => route('regimen.dashboard'), 'icon' => 'academic-cap'],
+            ['label' => 'Regimen', 'href' => route('regimen.dashboard'), 'icon' => 'bolt'],
             ['label' => 'Bibliothek', 'href' => route('regimen.topics.index')],
         ]">
             <button @click="Alpine?.store('page') && (Alpine.store('page')['activityOpen'] = !Alpine.store('page')['activityOpen'])"
@@ -45,7 +45,7 @@
                 </div>
                 <div class="p-3 rounded-lg bg-black/[0.02] dark:bg-white/[0.03]">
                     <div class="flex items-center justify-between">
-                        <span class="text-xs text-gray-500 dark:text-gray-400">Lektionen gesamt</span>
+                        <span class="text-xs text-gray-500 dark:text-gray-400">Einheiten gesamt</span>
                         <span class="text-sm font-semibold text-gray-900 dark:text-gray-100">{{ $sessionsTotal }}</span>
                     </div>
                 </div>
@@ -68,8 +68,8 @@
                     <span class="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-[var(--ui-muted-10)] text-gray-500 dark:text-gray-400" style="font-family: var(--ui-font-mono);">frei</span>
                 </div>
                 <p class="text-sm text-gray-500 dark:text-gray-400 mt-1 max-w-2xl">
-                    Alle Lektionen nach Thema — stöber frei und pick dir einzelne heraus, ohne Reihenfolge oder Einschreiben.
-                    Lieber geführt mit Fortschritt? <a wire:navigate href="{{ route('regimen.plans.index') }}" class="text-[var(--ui-primary)] font-medium hover:underline">Nimm die Kurse</a>.
+                    Alle Einheiten nach Thema — stöber frei und pick dir einzelne heraus, ohne Reihenfolge oder Zuweisung.
+                    Lieber geführt mit Fortschritt? <a wire:navigate href="{{ route('regimen.plans.index') }}" class="text-[var(--ui-primary)] font-medium hover:underline">Nimm die Pläne</a>.
                 </p>
             </div>
 
@@ -92,7 +92,7 @@
                                 <div class="min-w-0 flex-1">
                                     <h3 class="font-semibold text-[15px] text-gray-900 dark:text-gray-100 leading-tight">{{ $topic->title }}</h3>
                                     <div class="text-[11px] font-semibold mt-0.5" style="font-family: var(--ui-font-mono); color: {{ $hex }};">
-                                        {{ $topic->session_total }} {{ $topic->session_total === 1 ? 'Lektion' : 'Lektionen' }}
+                                        {{ $topic->session_total }} {{ $topic->session_total === 1 ? 'Einheit' : 'Einheiten' }}
                                     </div>
                                 </div>
                             </div>

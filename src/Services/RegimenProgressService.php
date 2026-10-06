@@ -28,7 +28,7 @@ class RegimenProgressService
         $progress->completed_at = now();
         $progress->save();
 
-        // Kurs-Einschreibung ggf. auf "abgeschlossen" heben.
+        // Plan-Einschreibung ggf. auf "abgeschlossen" heben.
         app(RegimenEnrollmentService::class)->syncCompletion($userId, $session);
 
         return $progress;
@@ -48,7 +48,7 @@ class RegimenProgressService
         $progress->completed_at = null;
         $progress->save();
 
-        // Falls ein Kurs dadurch nicht mehr 100% ist, Einschreibung reaktivieren.
+        // Falls ein Plan dadurch nicht mehr 100% ist, Einschreibung reaktivieren.
         app(RegimenEnrollmentService::class)->syncCompletion($userId, $session);
 
         return $progress;

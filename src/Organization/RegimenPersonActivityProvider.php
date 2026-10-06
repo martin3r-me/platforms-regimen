@@ -21,7 +21,7 @@ class RegimenPersonActivityProvider implements PersonActivityProvider
     {
         return [
             'label'       => 'Akademie',
-            'icon'        => 'academic-cap',
+            'icon'        => 'bolt',
             'description' => 'Deine Pflichtkurse',
         ];
     }
@@ -74,7 +74,7 @@ class RegimenPersonActivityProvider implements PersonActivityProvider
         return [[
             'key'         => 'pflicht',
             'label'       => 'Offene Pflichtkurse',
-            'icon'        => 'academic-cap',
+            'icon'        => 'bolt',
             'total_count' => count($open),
             'items'       => $items,
         ]];

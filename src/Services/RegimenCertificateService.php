@@ -9,8 +9,8 @@ use Platform\Regimen\Models\RegimenPlan;
 class RegimenCertificateService
 {
     /**
-     * Stellt ein Zertifikat aus, sobald ein Kurs zu 100% abgeschlossen ist.
-     * Idempotent: existiert bereits eines fuer User+Kurs, wird es zurueckgegeben.
+     * Stellt ein Zertifikat aus, sobald ein Plan zu 100% abgeschlossen ist.
+     * Idempotent: existiert bereits eines fuer User+Plan, wird es zurueckgegeben.
      */
     public function issueIfComplete(int $userId, RegimenPlan $plan): ?RegimenCertificate
     {
@@ -40,7 +40,7 @@ class RegimenCertificateService
 
     /**
      * Seriennummer im Format CODE-JAHR-LFDNR, z. B. VO-2026-0007.
-     * Faellt der Kurs ohne Code, wird eine Kurzform aus der Plan-ID genutzt.
+     * Faellt der Plan ohne Code, wird eine Kurzform aus der Plan-ID genutzt.
      */
     protected function generateSerial(RegimenPlan $plan): string
     {

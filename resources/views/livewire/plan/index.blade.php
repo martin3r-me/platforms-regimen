@@ -1,13 +1,13 @@
 <div class="h-full">
 <x-ui-page>
     <x-slot name="navbar">
-        <x-ui-page-navbar title="Kurse" icon="heroicon-o-rectangle-stack" />
+        <x-ui-page-navbar title="Pläne" icon="heroicon-o-rectangle-stack" />
     </x-slot>
 
     <x-slot name="actionbar">
         <x-ui-page-actionbar :breadcrumbs="[
-            ['label' => 'Regimen', 'href' => route('regimen.dashboard'), 'icon' => 'academic-cap'],
-            ['label' => 'Kurse', 'href' => route('regimen.plans.index')],
+            ['label' => 'Regimen', 'href' => route('regimen.dashboard'), 'icon' => 'bolt'],
+            ['label' => 'Pläne', 'href' => route('regimen.plans.index')],
         ]">
             <button @click="Alpine?.store('page') && (Alpine.store('page')['activityOpen'] = !Alpine.store('page')['activityOpen'])"
                 class="inline-flex items-center gap-1.5 px-2.5 py-1.5 text-sm rounded-lg text-[var(--ui-muted)] hover:text-[var(--ui-secondary)] hover:bg-[var(--ui-muted-5)] transition-colors">
@@ -23,7 +23,7 @@
                 <a wire:navigate href="{{ route('regimen.plans.index') }}"
                    class="flex items-center gap-2 px-3 py-2 rounded-lg text-sm {{ !$activeCategory ? 'bg-[var(--ui-primary-5)] text-[var(--ui-primary)] font-medium' : 'text-gray-700 dark:text-gray-300 hover:bg-[var(--ui-muted-5)]' }}">
                     @svg('heroicon-o-rectangle-stack', 'w-4 h-4')
-                    <span class="flex-1 truncate">Alle Kurse</span>
+                    <span class="flex-1 truncate">Alle Pläne</span>
                 </a>
                 @foreach($categories as $cat)
                     <a wire:navigate href="{{ route('regimen.plans.index', ['category' => $cat->slug]) }}"
@@ -38,11 +38,11 @@
     </x-slot>
 
     <x-slot name="activity">
-        <x-ui-page-sidebar title="Kurse" width="w-80" :defaultOpen="false" storeKey="activityOpen" side="right">
+        <x-ui-page-sidebar title="Pläne" width="w-80" :defaultOpen="false" storeKey="activityOpen" side="right">
             <div class="p-5 space-y-3">
                 <div class="p-3 rounded-lg bg-black/[0.02] dark:bg-white/[0.03]">
                     <div class="flex items-center justify-between">
-                        <span class="text-xs text-gray-500 dark:text-gray-400">Kurse</span>
+                        <span class="text-xs text-gray-500 dark:text-gray-400">Pläne</span>
                         <span class="text-sm font-semibold text-gray-900 dark:text-gray-100">{{ $plans->count() }}</span>
                     </div>
                 </div>
@@ -61,12 +61,12 @@
 
             <div>
                 <div class="flex items-center gap-2">
-                    <h1 class="text-2xl font-bold tracking-tight text-gray-900 dark:text-gray-100" style="font-family: var(--ui-font-mono);">Kurskatalog</h1>
+                    <h1 class="text-2xl font-bold tracking-tight text-gray-900 dark:text-gray-100" style="font-family: var(--ui-font-mono);">Plankatalog</h1>
                     <span class="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-[var(--ui-primary-10)] text-[var(--ui-primary)]" style="font-family: var(--ui-font-mono);">geführt</span>
                 </div>
                 <p class="text-sm text-gray-500 dark:text-gray-400 mt-1 max-w-2xl">
-                    Kuratierte Lernpfade in fester Reihenfolge — schreib dich ein und arbeite dich mit Fortschritt durch.
-                    Nur eine einzelne Lektion gesucht? <a wire:navigate href="{{ route('regimen.topics.index') }}" class="text-[var(--ui-primary)] font-medium hover:underline">Stöber frei in der Bibliothek</a>.
+                    Kuratierte Trainingspläne in fester Reihenfolge — schreib dich ein und arbeite dich mit Fortschritt durch.
+                    Nur eine einzelne Einheit gesucht? <a wire:navigate href="{{ route('regimen.topics.index') }}" class="text-[var(--ui-primary)] font-medium hover:underline">Stöber frei in der Bibliothek</a>.
                 </p>
             </div>
 
@@ -81,9 +81,9 @@
             @if($plans->isEmpty())
                 <div class="p-6 text-center rounded-2xl border border-[var(--ui-border)] bg-[var(--ui-muted-5)] text-gray-500 dark:text-gray-400">
                     @if($activeCategory)
-                        In dieser Kategorie sind noch keine Kurse veröffentlicht.
+                        In dieser Kategorie sind noch keine Pläne veröffentlicht.
                     @else
-                        Noch keine Kurse veröffentlicht.
+                        Noch keine Pläne veröffentlicht.
                     @endif
                 </div>
             @else
@@ -112,7 +112,7 @@
                                     @else
                                         <div class="flex items-center justify-between">
                                             <span class="text-[11px] text-gray-400" style="font-family: var(--ui-font-mono);">
-                                                {{ $plan->sessions_count }} {{ $plan->sessions_count == 1 ? 'Lektion' : 'Lektionen' }}@if($plan->levelLabel()) · {{ $plan->levelLabel() }}@endif
+                                                {{ $plan->sessions_count }} {{ $plan->sessions_count == 1 ? 'Einheit' : 'Einheiten' }}@if($plan->levelLabel()) · {{ $plan->levelLabel() }}@endif
                                             </span>
                                             <span class="text-[11px] font-semibold text-[var(--ui-primary)] opacity-0 group-hover:opacity-100 transition-opacity" style="font-family: var(--ui-font-mono);">Ansehen →</span>
                                         </div>

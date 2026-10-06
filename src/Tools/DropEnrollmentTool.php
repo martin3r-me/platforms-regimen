@@ -21,7 +21,7 @@ class DropEnrollmentTool implements ToolContract, ToolMetadataContract
 
     public function getDescription(): string
     {
-        return 'DELETE /regimen/enrollments - Beendet die Einschreibung des Users in einen Kurs. Der Session-Fortschritt bleibt erhalten. ERFORDERLICH: plan_id.';
+        return 'DELETE /regimen/enrollments - Beendet die Einschreibung des Users in einen Plan. Der Session-Fortschritt bleibt erhalten. ERFORDERLICH: plan_id.';
     }
 
     public function getSchema(): array
@@ -44,7 +44,7 @@ class DropEnrollmentTool implements ToolContract, ToolMetadataContract
 
             $plan = RegimenPlan::where('team_id', $resolved['team_id'])->find((int) ($arguments['plan_id'] ?? 0));
             if (!$plan) {
-                return ToolResult::error('NOT_FOUND', 'Lernpfad nicht gefunden.');
+                return ToolResult::error('NOT_FOUND', 'Plan nicht gefunden.');
             }
 
             app(RegimenEnrollmentService::class)->drop($context->user->id, $plan);

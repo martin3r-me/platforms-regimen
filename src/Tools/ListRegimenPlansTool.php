@@ -20,7 +20,7 @@ class ListRegimenPlansTool implements ToolContract, ToolMetadataContract
 
     public function getDescription(): string
     {
-        return 'GET /regimen/plans - Listet alle Lernpfade des Teams.';
+        return 'GET /regimen/plans - Listet alle Pläne des Teams.';
     }
 
     public function getSchema(): array

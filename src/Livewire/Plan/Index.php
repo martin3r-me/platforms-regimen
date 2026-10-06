@@ -18,8 +18,8 @@ class Index extends Component
     {
         $this->dispatch('comms', [
             'model' => null, 'modelId' => null,
-            'subject' => 'Regimen: Kurse',
-            'description' => 'Kurskatalog',
+            'subject' => 'Regimen: Pläne',
+            'description' => 'Plankatalog',
             'url' => route('regimen.plans.index'),
             'source' => 'regimen.plans.index',
             'recipients' => [],

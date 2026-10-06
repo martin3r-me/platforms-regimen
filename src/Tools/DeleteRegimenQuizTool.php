@@ -20,7 +20,7 @@ class DeleteRegimenQuizTool implements ToolContract, ToolMetadataContract
 
     public function getDescription(): string
     {
-        return 'DELETE /regimen/quizzes - Entfernt den Concept-Check einer Lektion (inkl. Fragen, Optionen, Versuche). Danach ist die Lektion wieder ohne Quiz abschliessbar. Identifikation per session_id.';
+        return 'DELETE /regimen/quizzes - Entfernt den Concept-Check einer Einheit (inkl. Fragen, Optionen, Versuche). Danach ist die Einheit wieder ohne Quiz abschliessbar. Identifikation per session_id.';
     }
 
     public function getSchema(): array
@@ -47,7 +47,7 @@ class DeleteRegimenQuizTool implements ToolContract, ToolMetadataContract
                 return ToolResult::error('NOT_FOUND', 'Session nicht gefunden.');
             }
             if (!$session->quiz) {
-                return ToolResult::error('NOT_FOUND', 'Diese Lektion hat keinen Concept-Check.');
+                return ToolResult::error('NOT_FOUND', 'Diese Einheit hat keinen Concept-Check.');
             }
 
             $session->quiz->delete(); // cascade: Fragen, Optionen, Versuche

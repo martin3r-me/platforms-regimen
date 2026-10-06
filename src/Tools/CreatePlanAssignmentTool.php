@@ -22,7 +22,7 @@ class CreatePlanAssignmentTool implements ToolContract, ToolMetadataContract
 
     public function getDescription(): string
     {
-        return 'POST /regimen/assignments - Weist einen Kurs (Plan) einem Ziel zu und macht ihn optional zur Pflicht, mit Start/Fällig-Datum. Das Ziel wird sofort zu Personen aufgeloest (Auto-Enroll). ERFORDERLICH: plan_id, target_type (user|team|org_entity|org_role), target_id. Optional: target_options (z.B. {"include_subteams":true,"include_descendants":true}), is_mandatory (Default true), starts_at, due_at (YYYY-MM-DD), note. Hinweis: org_entity/org_role sind nur verfuegbar, wenn das Organisation-Modul installiert ist.';
+        return 'POST /regimen/assignments - Weist einen Plan (Plan) einem Ziel zu und macht ihn optional zur Pflicht, mit Start/Fällig-Datum. Das Ziel wird sofort zu Personen aufgeloest (Auto-Enroll). ERFORDERLICH: plan_id, target_type (user|team|org_entity|org_role), target_id. Optional: target_options (z.B. {"include_subteams":true,"include_descendants":true}), is_mandatory (Default true), starts_at, due_at (YYYY-MM-DD), note. Hinweis: org_entity/org_role sind nur verfuegbar, wenn das Organisation-Modul installiert ist.';
     }
 
     public function getSchema(): array
@@ -52,7 +52,7 @@ class CreatePlanAssignmentTool implements ToolContract, ToolMetadataContract
 
             $plan = RegimenPlan::where('team_id', $resolved['team_id'])->find((int) ($arguments['plan_id'] ?? 0));
             if (!$plan) {
-                return ToolResult::error('NOT_FOUND', 'Kurs (Plan) nicht gefunden.');
+                return ToolResult::error('NOT_FOUND', 'Plan (Plan) nicht gefunden.');
             }
 
             $targetType = (string) ($arguments['target_type'] ?? '');
@@ -90,7 +90,7 @@ class CreatePlanAssignmentTool implements ToolContract, ToolMetadataContract
                 'is_mandatory' => (bool) $rule->is_mandatory,
                 'due_at' => $rule->due_at?->toDateString(),
                 'assigned_persons' => $count,
-                'message' => "Kurs '{$plan->title}' zugewiesen an {$count} Person(en).",
+                'message' => "Plan '{$plan->title}' zugewiesen an {$count} Person(en).",
             ]);
         } catch (\Throwable $e) {
             return ToolResult::error('EXECUTION_ERROR', 'Fehler: ' . $e->getMessage());

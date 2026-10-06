@@ -20,7 +20,7 @@ class ListMyEnrollmentsTool implements ToolContract, ToolMetadataContract
 
     public function getDescription(): string
     {
-        return 'GET /regimen/enrollments - Listet die Kurse des aktuellen Users ("Meine Regimen") inkl. Fortschritt und Resume-Session.';
+        return 'GET /regimen/enrollments - Listet die Pläne des aktuellen Users ("Meine Regimen") inkl. Fortschritt und Resume-Session.';
     }
 
     public function getSchema(): array

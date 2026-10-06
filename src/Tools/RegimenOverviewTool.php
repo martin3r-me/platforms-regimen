@@ -23,7 +23,7 @@ class RegimenOverviewTool implements ToolContract, ToolMetadataContract
 
     public function getDescription(): string
     {
-        return 'GET /regimen/overview - Zeigt eine Uebersicht der Regimen: Anzahl Themen, Sessions, Lernpfade + eigene Lernfortschritte.';
+        return 'GET /regimen/overview - Zeigt eine Uebersicht der Regimen: Anzahl Themen, Sessions, Pläne + eigene Lernfortschritte.';
     }
 
     public function getSchema(): array

@@ -20,7 +20,7 @@ class ListRegimenCategoriesTool implements ToolContract, ToolMetadataContract
 
     public function getDescription(): string
     {
-        return 'GET /regimen/categories - Listet alle Kurs-Kategorien ("Schools") des Teams inkl. Kurs-Anzahl.';
+        return 'GET /regimen/categories - Listet alle Plan-Kategorien ("Disziplins") des Teams inkl. Plan-Anzahl.';
     }
 
     public function getSchema(): array

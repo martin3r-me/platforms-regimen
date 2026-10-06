@@ -21,7 +21,7 @@ class DeleteRegimenPlanTool implements ToolContract, ToolMetadataContract
 
     public function getDescription(): string
     {
-        return 'DELETE /regimen/plans - Loescht einen Lernpfad (Sessions bleiben erhalten, nur die Zuordnung wird entfernt).';
+        return 'DELETE /regimen/plans - Loescht einen Plan (Sessions bleiben erhalten, nur die Zuordnung wird entfernt).';
     }
 
     public function getSchema(): array
@@ -45,14 +45,14 @@ class DeleteRegimenPlanTool implements ToolContract, ToolMetadataContract
             $planId = (int) ($arguments['plan_id'] ?? 0);
             $plan = RegimenPlan::where('team_id', $resolved['team_id'])->find($planId);
             if (!$plan) {
-                return ToolResult::error('NOT_FOUND', 'Lernpfad nicht gefunden.');
+                return ToolResult::error('NOT_FOUND', 'Plan nicht gefunden.');
             }
 
             $title = $plan->title;
             app(RegimenPlanService::class)->delete($plan);
 
             return ToolResult::success([
-                'message' => "Lernpfad '{$title}' geloescht.",
+                'message' => "Plan '{$title}' geloescht.",
             ]);
         } catch (\Throwable $e) {
             return ToolResult::error('EXECUTION_ERROR', 'Fehler: ' . $e->getMessage());

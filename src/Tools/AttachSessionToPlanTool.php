@@ -22,7 +22,7 @@ class AttachSessionToPlanTool implements ToolContract, ToolMetadataContract
 
     public function getDescription(): string
     {
-        return 'POST /regimen/plans/sessions/attach - Fuegt eine Session einem Lernpfad hinzu (oder verschiebt sie, wenn schon zugeordnet). sort_order optional.';
+        return 'POST /regimen/plans/sessions/attach - Fuegt eine Session einem Plan hinzu (oder verschiebt sie, wenn schon zugeordnet). sort_order optional.';
     }
 
     public function getSchema(): array
@@ -46,7 +46,7 @@ class AttachSessionToPlanTool implements ToolContract, ToolMetadataContract
             if ($resolved['error']) return $resolved['error'];
 
             $plan = RegimenPlan::where('team_id', $resolved['team_id'])->find((int) ($arguments['plan_id'] ?? 0));
-            if (!$plan) return ToolResult::error('NOT_FOUND', 'Lernpfad nicht gefunden.');
+            if (!$plan) return ToolResult::error('NOT_FOUND', 'Plan nicht gefunden.');
 
             $session = RegimenSession::where('team_id', $resolved['team_id'])->find((int) ($arguments['session_id'] ?? 0));
             if (!$session) return ToolResult::error('NOT_FOUND', 'Session nicht gefunden.');
@@ -57,7 +57,7 @@ class AttachSessionToPlanTool implements ToolContract, ToolMetadataContract
             return ToolResult::success([
                 'plan_id' => $plan->id,
                 'session_id' => $session->id,
-                'message' => "Session '{$session->title}' an Pfad '{$plan->title}' angehaengt.",
+                'message' => "Session '{$session->title}' an Plan '{$plan->title}' angehaengt.",
             ]);
         } catch (\Throwable $e) {
             return ToolResult::error('EXECUTION_ERROR', 'Fehler: ' . $e->getMessage());

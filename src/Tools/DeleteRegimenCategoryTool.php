@@ -21,7 +21,7 @@ class DeleteRegimenCategoryTool implements ToolContract, ToolMetadataContract
 
     public function getDescription(): string
     {
-        return 'DELETE /regimen/categories - Loescht eine Kategorie. Zugeordnete Kurse bleiben erhalten (Kategorie wird entfernt). ERFORDERLICH: category_id.';
+        return 'DELETE /regimen/categories - Loescht eine Kategorie. Zugeordnete Pläne bleiben erhalten (Kategorie wird entfernt). ERFORDERLICH: category_id.';
     }
 
     public function getSchema(): array

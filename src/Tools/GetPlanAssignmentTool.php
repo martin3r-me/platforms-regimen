@@ -21,7 +21,7 @@ class GetPlanAssignmentTool implements ToolContract, ToolMetadataContract
 
     public function getDescription(): string
     {
-        return 'GET /regimen/assignment - Detail einer Kurs-Zuweisung inkl. Status pro Person. ERFORDERLICH: assignment_id.';
+        return 'GET /regimen/assignment - Detail einer Plan-Zuweisung inkl. Status pro Person. ERFORDERLICH: assignment_id.';
     }
 
     public function getSchema(): array

@@ -6,8 +6,8 @@
 
     <x-slot name="actionbar">
         <x-ui-page-actionbar :breadcrumbs="[
-            ['label' => 'Regimen', 'href' => route('regimen.dashboard'), 'icon' => 'academic-cap'],
-            ['label' => 'Kurse', 'href' => route('regimen.plans.index')],
+            ['label' => 'Regimen', 'href' => route('regimen.dashboard'), 'icon' => 'bolt'],
+            ['label' => 'Pläne', 'href' => route('regimen.plans.index')],
             ['label' => $plan->code ? $plan->code : $plan->title, 'href' => route('regimen.plans.show', ['uuid' => $plan->uuid])],
         ]">
             <button @click="Alpine?.store('page') && (Alpine.store('page')['activityOpen'] = !Alpine.store('page')['activityOpen'])"
@@ -19,7 +19,7 @@
     </x-slot>
 
     <x-slot name="sidebar">
-        <x-ui-page-sidebar title="Lektionen" icon="heroicon-o-list-bullet" width="w-72" :defaultOpen="true">
+        <x-ui-page-sidebar title="Einheiten" icon="heroicon-o-list-bullet" width="w-72" :defaultOpen="true">
             <nav class="p-3 space-y-1">
                 @forelse($sessions as $i => $session)
                     @php
@@ -34,14 +34,14 @@
                         <span class="flex-1 truncate">{{ $session->title }}</span>
                     </a>
                 @empty
-                    <div class="px-3 py-2 text-xs text-gray-400">Noch keine Lektionen.</div>
+                    <div class="px-3 py-2 text-xs text-gray-400">Noch keine Einheiten.</div>
                 @endforelse
             </nav>
         </x-ui-page-sidebar>
     </x-slot>
 
     <x-slot name="activity">
-        <x-ui-page-sidebar title="Kurs" width="w-80" :defaultOpen="false" storeKey="activityOpen" side="right">
+        <x-ui-page-sidebar title="Plan" width="w-80" :defaultOpen="false" storeKey="activityOpen" side="right">
             <div class="p-5 space-y-5">
                 <div>
                     <h3 class="text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400 mb-3">Meta</h3>
@@ -64,9 +64,9 @@
 
                 @if($enrollment)
                     <button wire:click="drop"
-                            wire:confirm="Kurs wirklich verlassen? Dein Lektions-Fortschritt bleibt erhalten."
+                            wire:confirm="Plan wirklich verlassen? Dein Einheits-Fortschritt bleibt erhalten."
                             class="w-full text-center text-xs text-gray-400 hover:text-red-500 transition">
-                        Kurs verlassen
+                        Plan verlassen
                     </button>
                 @endif
             </div>
@@ -95,7 +95,7 @@
                     </span>
                     <div class="min-w-0 text-sm">
                         <div class="font-semibold text-gray-900 dark:text-gray-100">
-                            {{ $assignment->is_mandatory ? 'Dieser Kurs ist dir als Pflicht zugewiesen.' : 'Dieser Kurs wurde dir empfohlen.' }}
+                            {{ $assignment->is_mandatory ? 'Dieser Plan ist dir als Pflicht zugewiesen.' : 'Dieser Plan wurde dir empfohlen.' }}
                         </div>
                         <div class="text-[13px] {{ $aOverdue ? 'text-red-600 dark:text-red-400' : 'text-gray-500 dark:text-gray-400' }}">
                             @if($aOverdue)
@@ -134,7 +134,7 @@
                     @endif
 
                     <div class="flex items-center gap-4 text-sm text-white/80" style="font-family: var(--ui-font-mono);">
-                        <span class="inline-flex items-center gap-1.5">@svg('heroicon-o-rectangle-stack', 'w-4 h-4') {{ $summary['total'] }} {{ $summary['total'] == 1 ? 'Lektion' : 'Lektionen' }}</span>
+                        <span class="inline-flex items-center gap-1.5">@svg('heroicon-o-rectangle-stack', 'w-4 h-4') {{ $summary['total'] }} {{ $summary['total'] == 1 ? 'Einheit' : 'Einheiten' }}</span>
                         @if($totalMin)
                             <span class="inline-flex items-center gap-1.5">@svg('heroicon-o-clock', 'w-4 h-4') ~{{ $totalMin }} min</span>
                         @endif
@@ -146,7 +146,7 @@
                             @if($enrollment->isCompleted())
                                 <div class="flex flex-col sm:flex-row sm:items-center gap-3">
                                     <div class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white/95 text-sm font-semibold" style="color: {{ $coverColor }};">
-                                        @svg('heroicon-s-check-badge', 'w-5 h-5') Kurs abgeschlossen
+                                        @svg('heroicon-s-check-badge', 'w-5 h-5') Plan abgeschlossen
                                     </div>
                                     @if($certificate)
                                         <a wire:navigate href="{{ route('regimen.certificates.show', ['uuid' => $certificate->uuid]) }}"
@@ -160,7 +160,7 @@
                                     @if($resumeSession)
                                         <a wire:navigate href="{{ route('regimen.sessions.show', ['uuid' => $resumeSession->uuid]) }}"
                                            class="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-white text-sm font-bold shadow-md hover:shadow-lg hover:scale-[1.02] transition" style="color: {{ $coverColor }};">
-                                            Weiterlernen @svg('heroicon-s-arrow-right', 'w-4 h-4')
+                                            Weitermachen @svg('heroicon-s-arrow-right', 'w-4 h-4')
                                         </a>
                                     @endif
                                     <div class="flex-1 max-w-xs">
@@ -177,7 +177,7 @@
                         @else
                             <button wire:click="enroll"
                                     class="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-white text-sm font-bold shadow-md hover:shadow-lg hover:scale-[1.02] transition" style="color: {{ $coverColor }};">
-                                @svg('heroicon-o-plus', 'w-5 h-5') In Kurs einschreiben
+                                @svg('heroicon-o-plus', 'w-5 h-5') Plan starten
                             </button>
                         @endif
                     </div>
@@ -187,13 +187,13 @@
             {{-- ===== LEHRPLAN ===== --}}
             <div>
                 <div class="flex items-baseline justify-between mb-4">
-                    <h2 class="text-lg font-bold tracking-tight text-gray-900 dark:text-gray-100" style="font-family: var(--ui-font-mono);">Lehrplan</h2>
+                    <h2 class="text-lg font-bold tracking-tight text-gray-900 dark:text-gray-100" style="font-family: var(--ui-font-mono);">Einheiten</h2>
                     <span class="text-xs text-gray-400" style="font-family: var(--ui-font-mono);">{{ $summary['completed'] }}/{{ $summary['total'] }} erledigt</span>
                 </div>
 
                 @if($sessions->isEmpty())
                     <div class="p-6 text-center rounded-2xl border border-[var(--ui-border)] bg-[var(--ui-muted-5)] text-gray-500 dark:text-gray-400">
-                        Diesem Kurs sind noch keine Lektionen zugeordnet.
+                        Diesem Plan sind noch keine Einheiten zugeordnet.
                     </div>
                 @else
                     <ol class="space-y-2">

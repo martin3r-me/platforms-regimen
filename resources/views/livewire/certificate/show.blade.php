@@ -6,8 +6,8 @@
 
     <x-slot name="actionbar">
         <x-ui-page-actionbar :breadcrumbs="[
-            ['label' => 'Regimen', 'href' => route('regimen.dashboard'), 'icon' => 'academic-cap'],
-            ['label' => 'Kurse', 'href' => route('regimen.plans.index')],
+            ['label' => 'Regimen', 'href' => route('regimen.dashboard'), 'icon' => 'bolt'],
+            ['label' => 'Pläne', 'href' => route('regimen.plans.index')],
             ['label' => $plan?->code ?: $plan?->title, 'href' => $plan ? route('regimen.plans.show', ['uuid' => $plan->uuid]) : '#'],
             ['label' => 'Zertifikat', 'href' => route('regimen.certificates.show', ['uuid' => $certificate->uuid])],
         ]" />
@@ -35,7 +35,7 @@
 
                     {{-- Kopf --}}
                     <div class="flex items-center justify-center gap-2 text-[11px] font-bold uppercase tracking-[0.2em] text-gray-400" style="font-family: var(--ui-font-mono);">
-                        @svg('heroicon-o-academic-cap', 'w-4 h-4') BHG.DIGITAL Regimen
+                        @svg('heroicon-o-bolt', 'w-4 h-4') BHG.DIGITAL Regimen
                     </div>
 
                     <div class="mt-6 text-sm font-medium uppercase tracking-[0.15em] text-gray-500 dark:text-gray-400" style="font-family: var(--ui-font-mono);">Abschlusszertifikat</div>
@@ -52,9 +52,9 @@
                     <p class="mt-8 text-[13px] text-gray-500 dark:text-gray-400">Hiermit wird bestätigt, dass</p>
                     <h1 class="mt-2 text-3xl md:text-4xl font-bold tracking-tight text-gray-900 dark:text-gray-100" style="font-family: var(--ui-font-mono); text-wrap: balance;">{{ $holder?->name ?? 'Teilnehmer' }}</h1>
 
-                    <p class="mt-5 text-[13px] text-gray-500 dark:text-gray-400">den Kurs erfolgreich abgeschlossen hat</p>
+                    <p class="mt-5 text-[13px] text-gray-500 dark:text-gray-400">den Plan erfolgreich abgeschlossen hat</p>
 
-                    {{-- Kurs --}}
+                    {{-- Plan --}}
                     <div class="mt-3 inline-flex flex-col items-center gap-2">
                         <div class="flex items-center gap-2">
                             <span class="text-[11px] font-bold tracking-wider px-2.5 py-1 rounded-full text-white" style="font-family: var(--ui-font-mono); background: {{ $accentColor }};">{{ $code }}</span>
@@ -62,7 +62,7 @@
                                 <span class="text-[11px] font-semibold uppercase tracking-wider px-2.5 py-1 rounded-full bg-[var(--ui-muted-10)] text-gray-600 dark:text-gray-300" style="font-family: var(--ui-font-mono);">{{ $plan->levelLabel() }}</span>
                             @endif
                         </div>
-                        <h2 class="text-xl md:text-2xl font-bold text-gray-900 dark:text-gray-100 max-w-xl" style="font-family: var(--ui-font-mono); text-wrap: balance;">{{ $plan?->title ?? 'Kurs' }}</h2>
+                        <h2 class="text-xl md:text-2xl font-bold text-gray-900 dark:text-gray-100 max-w-xl" style="font-family: var(--ui-font-mono); text-wrap: balance;">{{ $plan?->title ?? 'Plan' }}</h2>
                     </div>
 
                     {{-- Fußzeile: Serial + Datum --}}
@@ -84,7 +84,7 @@
                 @if($plan)
                     <a wire:navigate href="{{ route('regimen.plans.show', ['uuid' => $plan->uuid]) }}"
                        class="inline-flex items-center gap-2 px-4 py-2 rounded-xl border border-[var(--ui-border)] bg-[var(--ui-surface)] text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-[var(--ui-muted-5)] transition">
-                        @svg('heroicon-o-arrow-left', 'w-4 h-4') Zum Kurs
+                        @svg('heroicon-o-arrow-left', 'w-4 h-4') Zum Plan
                     </a>
                 @endif
                 <button onclick="window.print()"

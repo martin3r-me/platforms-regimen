@@ -10,7 +10,7 @@
         </x-ui-sidebar-item>
         <x-ui-sidebar-item :href="route('regimen.plans.index')" :active="request()->routeIs('regimen.plans.index')">
             @svg('heroicon-o-rectangle-stack', 'w-4 h-4 text-[var(--ui-secondary)]')
-            <span class="ml-2 text-sm">Kurse</span>
+            <span class="ml-2 text-sm">Pläne</span>
             <span class="ml-1.5 text-[10px] text-[var(--ui-muted)]">geführt</span>
         </x-ui-sidebar-item>
         <x-ui-sidebar-item :href="route('regimen.topics.index')" :active="request()->routeIs('regimen.topics.*')">
@@ -21,7 +21,7 @@
     </x-ui-sidebar-list>
 
     @if($assignments->isNotEmpty())
-        <x-ui-sidebar-list label="Meine Pflichtkurse">
+        <x-ui-sidebar-list label="Meine Pflichtpläne">
             @foreach($assignments as $a)
                 <x-ui-sidebar-item :href="route('regimen.plans.show', ['uuid' => $a['uuid']])" :active="request()->is('*/regimen/plans/' . $a['uuid'])">
                     @svg('heroicon-o-flag', 'w-4 h-4 ' . ($a['overdue'] ? 'text-red-500' : 'text-[var(--ui-primary)]'))
@@ -39,7 +39,7 @@
     @endif
 
     @if($plans->isNotEmpty())
-        <x-ui-sidebar-list label="Meine Kurse">
+        <x-ui-sidebar-list label="Meine Pläne">
             @foreach($plans as $plan)
                 <x-ui-sidebar-item :href="route('regimen.plans.show', ['uuid' => $plan['uuid']])" :active="request()->is('*/regimen/plans/' . $plan['uuid'])">
                     @svg($plan['icon'] ?: 'heroicon-o-rectangle-stack', 'w-4 h-4 text-[var(--ui-secondary)]')

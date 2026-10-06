@@ -9,7 +9,7 @@ use Platform\Regimen\Models\RegimenPlan;
 class RegimenCategoryService
 {
     /**
-     * Standard-Kategorien im Udacity-"School"-Stil — je mit eigener Signalfarbe
+     * Standard-Kategorien im Udacity-"Disziplin"-Stil — je mit eigener Signalfarbe
      * und Code-Prefix. Werden vom Seeder pro Team angelegt.
      */
     public const DEFAULTS = [
@@ -91,7 +91,7 @@ class RegimenCategoryService
     }
 
     /**
-     * Naechster freier Kurs-Code fuer eine Kategorie, z.B. "AI-110".
+     * Naechster freier Plan-Code fuer eine Kategorie, z.B. "AI-110".
      * Zaehlt in 10er-Schritten hoch, damit spaeter Platz zum Einschieben bleibt.
      */
     public function suggestCode(RegimenCategory $category): string

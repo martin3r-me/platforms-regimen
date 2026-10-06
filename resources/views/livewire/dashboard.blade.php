@@ -1,12 +1,12 @@
 <div class="h-full">
 <x-ui-page>
     <x-slot name="navbar">
-        <x-ui-page-navbar title="Regimen" icon="heroicon-o-academic-cap" />
+        <x-ui-page-navbar title="Regimen" icon="heroicon-o-bolt" />
     </x-slot>
 
     <x-slot name="actionbar">
         <x-ui-page-actionbar :breadcrumbs="[
-            ['label' => 'Regimen', 'href' => route('regimen.dashboard'), 'icon' => 'academic-cap'],
+            ['label' => 'Regimen', 'href' => route('regimen.dashboard'), 'icon' => 'bolt'],
         ]">
             <button @click="Alpine?.store('page') && (Alpine.store('page')['activityOpen'] = !Alpine.store('page')['activityOpen'])"
                 class="inline-flex items-center gap-1.5 px-2.5 py-1.5 text-sm rounded-lg text-[var(--ui-muted)] hover:text-[var(--ui-secondary)] hover:bg-[var(--ui-muted-5)] transition-colors">
@@ -22,7 +22,7 @@
                 <a wire:navigate href="{{ route('regimen.plans.index') }}"
                    class="flex items-center gap-2 px-3 py-2 rounded-lg text-sm text-gray-700 dark:text-gray-300 hover:bg-[var(--ui-muted-5)]">
                     @svg('heroicon-o-rectangle-stack', 'w-4 h-4 text-[var(--ui-secondary)]')
-                    <span class="flex-1 truncate">Alle Kurse</span>
+                    <span class="flex-1 truncate">Alle Pläne</span>
                 </a>
                 @foreach($categories as $cat)
                     <a wire:navigate href="{{ route('regimen.plans.index', ['category' => $cat->slug]) }}"
@@ -44,19 +44,19 @@
                     <div class="space-y-2">
                         <div class="p-3 rounded-lg bg-emerald-500/5 border border-emerald-500/15">
                             <div class="flex items-center justify-between">
-                                <span class="text-xs text-gray-600 dark:text-gray-300">Abgeschlossene Lektionen</span>
+                                <span class="text-xs text-gray-600 dark:text-gray-300">Abgeschlossene Einheiten</span>
                                 <span class="text-sm font-semibold text-emerald-700 dark:text-emerald-300">{{ $completedCount }}</span>
                             </div>
                         </div>
                         <div class="p-3 rounded-lg bg-black/[0.02] dark:bg-white/[0.03]">
                             <div class="flex items-center justify-between">
-                                <span class="text-xs text-gray-500 dark:text-gray-400">Abonnierte Kurse</span>
+                                <span class="text-xs text-gray-500 dark:text-gray-400">Aktive Pläne</span>
                                 <span class="text-sm font-semibold text-gray-900 dark:text-gray-100">{{ $enrolledCount }}</span>
                             </div>
                         </div>
                         <div class="p-3 rounded-lg bg-black/[0.02] dark:bg-white/[0.03]">
                             <div class="flex items-center justify-between">
-                                <span class="text-xs text-gray-500 dark:text-gray-400">Lektionen verfügbar</span>
+                                <span class="text-xs text-gray-500 dark:text-gray-400">Einheiten verfügbar</span>
                                 <span class="text-sm font-semibold text-gray-900 dark:text-gray-100">{{ $sessionsCount }}</span>
                             </div>
                         </div>
@@ -77,11 +77,11 @@
                 </h1>
                 <p class="text-[15px] text-gray-500 dark:text-gray-400 mt-2 max-w-xl">
                     @if($completedThisWeek > 0)
-                        Du hast diese Woche {{ $completedThisWeek }} {{ $completedThisWeek == 1 ? 'Lektion' : 'Lektionen' }} abgeschlossen. Mach da weiter, wo du aufgehört hast.
+                        Du hast diese Woche {{ $completedThisWeek }} {{ $completedThisWeek == 1 ? 'Einheit' : 'Einheiten' }} abgeschlossen. Mach da weiter, wo du aufgehört hast.
                     @elseif($activePlans->isNotEmpty())
-                        Deine Kurse warten auf dich — mach da weiter, wo du aufgehört hast.
+                        Deine Pläne warten auf dich — mach da weiter, wo du aufgehört hast.
                     @else
-                        Schreib dich in deinen ersten Kurs ein und starte deinen Lernpfad.
+                        Schreib dich in deinen ersten Plan ein und starte deinen Trainingsplan.
                     @endif
                 </p>
             </div>
@@ -127,7 +127,7 @@
                                         <div class="h-1.5 rounded-full {{ $overdue ? 'bg-red-500' : 'bg-[var(--ui-primary)]' }}" style="width: {{ $pct }}%"></div>
                                     </div>
                                     <div class="flex items-center justify-between text-[11px] text-gray-400" style="font-family: var(--ui-font-mono);">
-                                        <span>{{ $r['progress']['completed'] ?? 0 }} / {{ $r['progress']['total'] ?? 0 }} Lektionen</span>
+                                        <span>{{ $r['progress']['completed'] ?? 0 }} / {{ $r['progress']['total'] ?? 0 }} Einheiten</span>
                                         <span>{{ $pct }}%</span>
                                     </div>
                                     <a wire:navigate href="{{ route('regimen.plans.show', ['uuid' => $p->uuid]) }}"
@@ -141,7 +141,7 @@
                 </div>
             @endif
 
-            {{-- ZWEI WEGE ZU LERNEN --}}
+            {{-- ZWEI WEGE ZU TRAINIEREN --}}
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <a wire:navigate href="{{ route('regimen.plans.index') }}"
                    class="group rounded-2xl border border-[var(--ui-border)] bg-[var(--ui-surface)] p-5 flex gap-4 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all">
@@ -150,11 +150,11 @@
                     </span>
                     <div class="min-w-0">
                         <div class="flex items-center gap-2">
-                            <h3 class="font-semibold text-[15px] text-gray-900 dark:text-gray-100">Kurse</h3>
+                            <h3 class="font-semibold text-[15px] text-gray-900 dark:text-gray-100">Pläne</h3>
                             <span class="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-[var(--ui-primary-10)] text-[var(--ui-primary)]" style="font-family: var(--ui-font-mono);">geführt</span>
                         </div>
-                        <p class="text-[13px] text-gray-500 dark:text-gray-400 mt-1 leading-relaxed">Kuratierte Lernpfade in fester Reihenfolge — einschreiben, dranbleiben, abschließen.</p>
-                        <span class="inline-flex items-center gap-1 text-[12px] font-semibold text-[var(--ui-primary)] mt-2">Zu den Kursen @svg('heroicon-o-arrow-right', 'w-3.5 h-3.5')</span>
+                        <p class="text-[13px] text-gray-500 dark:text-gray-400 mt-1 leading-relaxed">Kuratierte Trainingspläne in fester Reihenfolge — starten, dranbleiben, abschließen.</p>
+                        <span class="inline-flex items-center gap-1 text-[12px] font-semibold text-[var(--ui-primary)] mt-2">Zu den Plänen @svg('heroicon-o-arrow-right', 'w-3.5 h-3.5')</span>
                     </div>
                 </a>
                 <a wire:navigate href="{{ route('regimen.topics.index') }}"
@@ -167,7 +167,7 @@
                             <h3 class="font-semibold text-[15px] text-gray-900 dark:text-gray-100">Bibliothek</h3>
                             <span class="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-[var(--ui-muted-10)] text-gray-500 dark:text-gray-400" style="font-family: var(--ui-font-mono);">frei</span>
                         </div>
-                        <p class="text-[13px] text-gray-500 dark:text-gray-400 mt-1 leading-relaxed">Alle Lektionen nach Thema. Frei stöbern und einzelne herauspicken — ohne Reihenfolge.</p>
+                        <p class="text-[13px] text-gray-500 dark:text-gray-400 mt-1 leading-relaxed">Alle Einheiten nach Thema. Frei stöbern und einzelne herauspicken — ohne Reihenfolge.</p>
                         <span class="inline-flex items-center gap-1 text-[12px] font-semibold text-gray-700 dark:text-gray-300 mt-2">Zur Bibliothek @svg('heroicon-o-arrow-right', 'w-3.5 h-3.5')</span>
                     </div>
                 </a>
@@ -177,8 +177,8 @@
             @if($activePlans->isNotEmpty())
                 <div>
                     <div class="flex items-center justify-between mb-4">
-                        <h2 class="text-lg font-semibold text-gray-900 dark:text-gray-100">Meine Regimen</h2>
-                        <a wire:navigate href="{{ route('regimen.plans.index') }}" class="text-xs font-semibold text-[var(--ui-primary)] hover:underline">Alle Kurse →</a>
+                        <h2 class="text-lg font-semibold text-gray-900 dark:text-gray-100">Mein Training</h2>
+                        <a wire:navigate href="{{ route('regimen.plans.index') }}" class="text-xs font-semibold text-[var(--ui-primary)] hover:underline">Alle Pläne →</a>
                     </div>
                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                         @foreach($activePlans as $row)
@@ -199,12 +199,12 @@
                                         <div class="h-1.5 rounded-full bg-emerald-500" style="width: {{ $row['progress']['pct'] }}%"></div>
                                     </div>
                                     <div class="flex items-center justify-between text-[11px] text-gray-400" style="font-family: var(--ui-font-mono);">
-                                        <span>{{ $row['progress']['completed'] }} / {{ $row['progress']['total'] }} Lektionen</span>
+                                        <span>{{ $row['progress']['completed'] }} / {{ $row['progress']['total'] }} Einheiten</span>
                                         <span>{{ $row['progress']['pct'] }}%</span>
                                     </div>
                                     <a wire:navigate href="{{ route('regimen.plans.show', ['uuid' => $p->uuid]) }}"
                                        class="mt-1 flex items-center justify-center gap-2 w-full px-4 py-2 rounded-lg bg-[var(--ui-primary)] text-white text-[13px] font-semibold hover:opacity-90 transition">
-                                        Weiterlernen @svg('heroicon-s-arrow-right', 'w-4 h-4')
+                                        Weitermachen @svg('heroicon-s-arrow-right', 'w-4 h-4')
                                     </a>
                                 </div>
                             </div>
@@ -252,7 +252,7 @@
             <div>
                 <div class="flex items-center justify-between mb-4">
                     <h2 class="text-lg font-semibold text-gray-900 dark:text-gray-100">
-                        {{ $activePlans->isNotEmpty() ? 'Kurse entdecken' : 'Kurskatalog' }}
+                        {{ $activePlans->isNotEmpty() ? 'Pläne entdecken' : 'Plankatalog' }}
                     </h2>
                     <a wire:navigate href="{{ route('regimen.plans.index') }}" class="text-xs font-semibold text-[var(--ui-primary)] hover:underline">Alle ansehen →</a>
                 </div>
@@ -260,9 +260,9 @@
                 @if($discover->isEmpty())
                     <div class="p-6 text-center rounded-2xl border border-[var(--ui-border)] bg-[var(--ui-muted-5)] text-gray-500 dark:text-gray-400">
                         @if($activePlans->isNotEmpty())
-                            Du bist in alle verfügbaren Kurse eingeschrieben. 🎉
+                            Du hast alle verfügbaren Pläne gestartet. 🎉
                         @else
-                            Noch keine Kurse veröffentlicht.
+                            Noch keine Pläne veröffentlicht.
                         @endif
                     </div>
                 @else
@@ -280,7 +280,7 @@
                                         <p class="text-[13px] text-gray-500 dark:text-gray-400 leading-relaxed line-clamp-2">{{ $p->description }}</p>
                                     @endif
                                     <div class="flex items-center gap-3 text-[11px] text-gray-400 mt-auto pt-1" style="font-family: var(--ui-font-mono);">
-                                        <span>{{ $p->sessions_count }} {{ $p->sessions_count == 1 ? 'Lektion' : 'Lektionen' }}</span>
+                                        <span>{{ $p->sessions_count }} {{ $p->sessions_count == 1 ? 'Einheit' : 'Einheiten' }}</span>
                                         @if($p->levelLabel())<span>· {{ $p->levelLabel() }}</span>@endif
                                     </div>
                                 </div>

@@ -20,7 +20,7 @@ class CreateRegimenCategoryTool implements ToolContract, ToolMetadataContract
 
     public function getDescription(): string
     {
-        return 'POST /regimen/categories - Legt eine Kurs-Kategorie an (z.B. "AI & Automation"). Farbe treibt Kurs-Cover + Chip, code_prefix die Kurs-Codes (z.B. "AI" -> AI-101).';
+        return 'POST /regimen/categories - Legt eine Plan-Kategorie an (z.B. "AI & Automation"). Farbe treibt Plan-Cover + Chip, code_prefix die Plan-Codes (z.B. "AI" -> AI-101).';
     }
 
     public function getSchema(): array
@@ -32,7 +32,7 @@ class CreateRegimenCategoryTool implements ToolContract, ToolMetadataContract
                 'title' => ['type' => 'string', 'description' => 'Titel der Kategorie (ERFORDERLICH).'],
                 'description' => ['type' => 'string'],
                 'color' => ['type' => 'string', 'description' => 'Hex-Basisfarbe, z.B. "#7C3AED".'],
-                'code_prefix' => ['type' => 'string', 'description' => 'Prefix fuer Kurs-Codes, z.B. "AI".'],
+                'code_prefix' => ['type' => 'string', 'description' => 'Prefix fuer Plan-Codes, z.B. "AI".'],
                 'icon' => ['type' => 'string', 'description' => 'Heroicon-Name, z.B. "heroicon-o-cpu-chip".'],
                 'slug' => ['type' => 'string'],
                 'sort_order' => ['type' => 'integer'],

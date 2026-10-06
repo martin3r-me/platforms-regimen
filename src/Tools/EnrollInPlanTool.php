@@ -21,7 +21,7 @@ class EnrollInPlanTool implements ToolContract, ToolMetadataContract
 
     public function getDescription(): string
     {
-        return 'POST /regimen/enrollments - Schreibt den aktuellen User in einen Kurs (Lernpfad) ein. ERFORDERLICH: plan_id.';
+        return 'POST /regimen/enrollments - Schreibt den aktuellen User in einen Plan (Plan) ein. ERFORDERLICH: plan_id.';
     }
 
     public function getSchema(): array
@@ -44,7 +44,7 @@ class EnrollInPlanTool implements ToolContract, ToolMetadataContract
 
             $plan = RegimenPlan::where('team_id', $resolved['team_id'])->find((int) ($arguments['plan_id'] ?? 0));
             if (!$plan) {
-                return ToolResult::error('NOT_FOUND', 'Lernpfad nicht gefunden.');
+                return ToolResult::error('NOT_FOUND', 'Plan nicht gefunden.');
             }
 
             $enrollment = app(RegimenEnrollmentService::class)->enroll($context->user->id, $plan);

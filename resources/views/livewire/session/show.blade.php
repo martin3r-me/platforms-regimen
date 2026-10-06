@@ -286,7 +286,7 @@
 
     <x-slot name="actionbar">
         <x-ui-page-actionbar :breadcrumbs="[
-            ['label' => 'Regimen', 'href' => route('regimen.dashboard'), 'icon' => 'academic-cap'],
+            ['label' => 'Regimen', 'href' => route('regimen.dashboard'), 'icon' => 'bolt'],
             ['label' => 'Bibliothek', 'href' => route('regimen.topics.index')],
             ['label' => $session->topic->title, 'href' => route('regimen.topics.show', ['uuid' => $session->topic->uuid])],
             ['label' => $session->title, 'href' => route('regimen.sessions.show', ['uuid' => $session->uuid])],
@@ -333,7 +333,7 @@
                     <a wire:navigate href="{{ route('regimen.topics.show', ['uuid' => $session->topic->uuid]) }}" class="hover:underline" style="color: {{ $accentColor }};">{{ $session->topic->title }}</a>
                     @if($num)
                         <span class="text-gray-300">·</span>
-                        <span class="text-gray-400">Lektion {{ $num }} / {{ $count }}</span>
+                        <span class="text-gray-400">Einheit {{ $num }} / {{ $count }}</span>
                     @endif
                 </div>
                 <h1 class="mt-3 text-3xl md:text-[2.4rem] leading-[1.1] font-bold tracking-tight text-gray-900 dark:text-gray-100" style="font-family: var(--ui-font-mono); text-wrap: balance;">{{ $session->title }}</h1>
@@ -366,11 +366,11 @@
                     <section id="concept-check" class="scroll-mt-6 rounded-3xl border border-[var(--ui-border)] bg-[var(--ui-surface)] overflow-hidden">
                         <div class="px-6 py-5 border-b border-[var(--ui-border)] bg-[var(--ui-muted-5)]">
                             <div class="flex items-center gap-2 text-gray-900 dark:text-gray-100 font-bold" style="font-family: var(--ui-font-mono);">
-                                @svg('heroicon-o-academic-cap', 'w-5 h-5 text-[var(--ui-primary)]')
+                                @svg('heroicon-o-bolt', 'w-5 h-5 text-[var(--ui-primary)]')
                                 Concept-Check
                             </div>
                             <p class="mt-1 text-[13px] text-gray-500 dark:text-gray-400">
-                                Beantworte die Fragen, um diese Lektion abzuschließen. Bestehensgrenze <span style="font-family: var(--ui-font-mono);">{{ $quiz->passThreshold() }}%</span>.
+                                Beantworte die Fragen, um diese Einheit abzuschließen. Bestehensgrenze <span style="font-family: var(--ui-font-mono);">{{ $quiz->passThreshold() }}%</span>.
                             </p>
                         </div>
 
@@ -381,7 +381,7 @@
                                     @svg('heroicon-s-check-badge', 'w-7 h-7 text-emerald-500 flex-shrink-0')
                                     <div>
                                         <div class="font-semibold text-emerald-700 dark:text-emerald-300">Concept-Check bestanden</div>
-                                        <div class="text-[13px] text-gray-500 dark:text-gray-400">Diese Lektion ist abgeschlossen. Du kannst sie rechts wieder öffnen, um erneut zu üben.</div>
+                                        <div class="text-[13px] text-gray-500 dark:text-gray-400">Diese Einheit ist abgeschlossen. Du kannst sie rechts wieder öffnen, um erneut zu üben.</div>
                                     </div>
                                 </div>
                             </div>
@@ -461,7 +461,7 @@
                                             @endif
                                             <div class="flex-1">
                                                 <div class="font-semibold {{ $passed ? 'text-emerald-700 dark:text-emerald-300' : 'text-amber-700 dark:text-amber-300' }}">
-                                                    {{ $passed ? 'Bestanden — Lektion abgeschlossen!' : 'Noch nicht bestanden' }}
+                                                    {{ $passed ? 'Bestanden — Einheit abgeschlossen!' : 'Noch nicht bestanden' }}
                                                 </div>
                                                 <div class="text-[13px] text-gray-600 dark:text-gray-400">
                                                     {{ $quizResult['correct'] }} von {{ $quizResult['total'] }} richtig
@@ -515,8 +515,8 @@
                         <a wire:navigate href="{{ route('regimen.plans.show', ['uuid' => $primaryPlan->uuid]) }}"
                            class="group flex items-center justify-end gap-3 p-4 sm:mt-6 rounded-2xl border border-emerald-500/25 bg-emerald-500/[0.07] hover:-translate-y-0.5 transition-all text-right">
                             <div class="min-w-0">
-                                <div class="text-[10px] uppercase tracking-wider text-emerald-600 dark:text-emerald-400 font-semibold" style="font-family: var(--ui-font-mono);">Kurs-Ende</div>
-                                <div class="text-sm font-medium text-gray-900 dark:text-gray-100 truncate">Zurück zur Kursübersicht</div>
+                                <div class="text-[10px] uppercase tracking-wider text-emerald-600 dark:text-emerald-400 font-semibold" style="font-family: var(--ui-font-mono);">Plan-Ende</div>
+                                <div class="text-sm font-medium text-gray-900 dark:text-gray-100 truncate">Zurück zur Planübersicht</div>
                             </div>
                             @svg('heroicon-o-flag', 'w-5 h-5 text-emerald-500 flex-shrink-0')
                         </a>
@@ -536,12 +536,12 @@
                         @if($next)
                             <a wire:navigate href="{{ route('regimen.sessions.show', ['uuid' => $next->uuid]) }}"
                                class="flex items-center justify-center gap-2 w-full px-4 py-2.5 rounded-xl bg-[var(--ui-primary)] text-white text-sm font-semibold hover:opacity-90 transition">
-                                {{ $nextIsNewChapter ? 'Nächstes Kapitel' : 'Nächste Lektion' }} @svg('heroicon-s-arrow-right', 'w-4 h-4')
+                                {{ $nextIsNewChapter ? 'Nächstes Kapitel' : 'Nächste Einheit' }} @svg('heroicon-s-arrow-right', 'w-4 h-4')
                             </a>
                         @elseif($primaryPlan)
                             <a wire:navigate href="{{ route('regimen.plans.show', ['uuid' => $primaryPlan->uuid]) }}"
                                class="flex items-center justify-center gap-2 w-full px-4 py-2.5 rounded-xl bg-[var(--ui-primary)] text-white text-sm font-semibold hover:opacity-90 transition">
-                                @svg('heroicon-s-flag', 'w-4 h-4') Zur Kursübersicht
+                                @svg('heroicon-s-flag', 'w-4 h-4') Zur Planübersicht
                             </a>
                         @endif
                         <button wire:click="reopen" class="w-full text-center text-xs text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition">Wieder als offen markieren</button>
@@ -550,10 +550,10 @@
                     {{-- Abschluss ist an den Concept-Check gebunden --}}
                     <div class="rounded-2xl border border-[var(--ui-primary-20)] bg-[var(--ui-primary-5)] p-5 space-y-3">
                         <div class="flex items-start gap-2.5">
-                            @svg('heroicon-o-academic-cap', 'w-5 h-5 text-[var(--ui-primary)] flex-shrink-0 mt-0.5')
+                            @svg('heroicon-o-bolt', 'w-5 h-5 text-[var(--ui-primary)] flex-shrink-0 mt-0.5')
                             <div>
                                 <div class="font-semibold text-gray-900 dark:text-gray-100">Concept-Check offen</div>
-                                <div class="text-[13px] text-gray-500 dark:text-gray-400">Bestehe den Check unten, um diese Lektion abzuschließen ({{ $quiz->passThreshold() }}% nötig).</div>
+                                <div class="text-[13px] text-gray-500 dark:text-gray-400">Bestehe den Check unten, um diese Einheit abzuschließen ({{ $quiz->passThreshold() }}% nötig).</div>
                             </div>
                         </div>
                         <a href="#concept-check"
@@ -565,7 +565,7 @@
                 @else
                     <div class="rounded-2xl border border-[var(--ui-border)] bg-[var(--ui-muted-5)] p-5 space-y-3">
                         <div>
-                            <div class="font-semibold text-gray-900 dark:text-gray-100">Fertig mit der Lektion?</div>
+                            <div class="font-semibold text-gray-900 dark:text-gray-100">Fertig mit der Einheit?</div>
                             <div class="text-[13px] text-gray-500 dark:text-gray-400">Markier sie als erledigt, um deinen Fortschritt zu tracken.</div>
                         </div>
                         <button wire:click="markComplete"
@@ -576,7 +576,7 @@
                         @if($next)
                             <a wire:navigate href="{{ route('regimen.sessions.show', ['uuid' => $next->uuid]) }}"
                                class="flex items-center justify-center gap-2 w-full px-4 py-2 rounded-xl border border-[var(--ui-border)] bg-[var(--ui-surface)] text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-[var(--ui-muted-5)] transition">
-                                {{ $nextIsNewChapter ? 'Nächstes Kapitel' : 'Nächste Lektion' }} @svg('heroicon-o-arrow-right', 'w-4 h-4')
+                                {{ $nextIsNewChapter ? 'Nächstes Kapitel' : 'Nächste Einheit' }} @svg('heroicon-o-arrow-right', 'w-4 h-4')
                             </a>
                         @endif
                     </div>
@@ -610,10 +610,10 @@
                     @endif
                 </div>
 
-                {{-- Kurse, in denen diese Lektion vorkommt --}}
+                {{-- Pläne, in denen diese Einheit vorkommt --}}
                 @if($planMemberships->isNotEmpty())
                     <div class="rounded-2xl border border-[var(--ui-border)] bg-[var(--ui-surface)] p-5">
-                        <div class="text-[10px] uppercase tracking-wider text-gray-400 mb-3" style="font-family: var(--ui-font-mono);">Teil dieser Kurse</div>
+                        <div class="text-[10px] uppercase tracking-wider text-gray-400 mb-3" style="font-family: var(--ui-font-mono);">Teil dieser Pläne</div>
                         <div class="space-y-1.5">
                             @foreach($planMemberships as $p)
                                 <a wire:navigate href="{{ route('regimen.plans.show', ['uuid' => $p->uuid]) }}"

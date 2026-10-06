@@ -21,7 +21,7 @@ class ReorderPlanSessionsTool implements ToolContract, ToolMetadataContract
 
     public function getDescription(): string
     {
-        return 'POST /regimen/plans/sessions/reorder - Setzt die Reihenfolge der Sessions in einem Pfad neu. session_ids ist die Liste der Session-IDs in gewuenschter Reihenfolge.';
+        return 'POST /regimen/plans/sessions/reorder - Setzt die Reihenfolge der Sessions in einem Plan neu. session_ids ist die Liste der Session-IDs in gewuenschter Reihenfolge.';
     }
 
     public function getSchema(): array
@@ -48,7 +48,7 @@ class ReorderPlanSessionsTool implements ToolContract, ToolMetadataContract
             if ($resolved['error']) return $resolved['error'];
 
             $plan = RegimenPlan::where('team_id', $resolved['team_id'])->find((int) ($arguments['plan_id'] ?? 0));
-            if (!$plan) return ToolResult::error('NOT_FOUND', 'Lernpfad nicht gefunden.');
+            if (!$plan) return ToolResult::error('NOT_FOUND', 'Plan nicht gefunden.');
 
             $sessionIds = $arguments['session_ids'] ?? [];
             if (!is_array($sessionIds) || empty($sessionIds)) {

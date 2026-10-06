@@ -21,7 +21,7 @@ class DeletePlanAssignmentTool implements ToolContract, ToolMetadataContract
 
     public function getDescription(): string
     {
-        return 'DELETE /regimen/assignments - Widerruft eine Kurs-Zuweisung (archiviert die Regel, setzt offene pro-Person-Zuweisungen auf "revoked"). Einschreibung und Lernfortschritt bleiben erhalten. ERFORDERLICH: assignment_id.';
+        return 'DELETE /regimen/assignments - Widerruft eine Plan-Zuweisung (archiviert die Regel, setzt offene pro-Person-Zuweisungen auf "revoked"). Einschreibung und Lernfortschritt bleiben erhalten. ERFORDERLICH: assignment_id.';
     }
 
     public function getSchema(): array

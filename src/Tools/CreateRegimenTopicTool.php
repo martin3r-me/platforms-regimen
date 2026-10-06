@@ -32,7 +32,7 @@ class CreateRegimenTopicTool implements ToolContract, ToolMetadataContract
                 'title' => ['type' => 'string', 'description' => 'Titel des Themas (ERFORDERLICH).'],
                 'description' => ['type' => 'string', 'description' => 'Optional: Kurzbeschreibung.'],
                 'slug' => ['type' => 'string', 'description' => 'Optional: Slug (sonst aus Titel generiert).'],
-                'icon' => ['type' => 'string', 'description' => 'Optional: Heroicon-Name, z.B. "heroicon-o-academic-cap".'],
+                'icon' => ['type' => 'string', 'description' => 'Optional: Heroicon-Name, z.B. "heroicon-o-bolt".'],
                 'color' => ['type' => 'string', 'description' => 'Optional: Farb-Token, z.B. "emerald".'],
                 'sort_order' => ['type' => 'integer', 'description' => 'Optional: Sortier-Reihenfolge.'],
             ],
