@@ -186,9 +186,12 @@ class RegimenAssignmentService
                 return;
             }
 
+            // Platform-Morph-Alias (NICHT $plan->getMorphClass(): RegimenPlan ist nicht
+            // in der Morph-Map → das lieferte den FQCN und der Link wäre für Alias-
+            // basierte Abfragen unsichtbar).
             app($serviceClass)->link(
                 'entity',
-                $plan->getMorphClass(),
+                'regimen_plan',
                 $plan->id,
                 $value->id,
                 [
