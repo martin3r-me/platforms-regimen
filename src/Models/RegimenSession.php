@@ -6,7 +6,6 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\HasOne;
 use Symfony\Component\Uid\UuidV7;
 
 class RegimenSession extends Model
@@ -107,14 +106,5 @@ class RegimenSession extends Model
     public function progressFor(int $userId): ?RegimenSessionProgress
     {
         return $this->progress()->where('user_id', $userId)->first();
-    }
-
-    /**
-     * Optionaler Concept-Check dieser Lektion. Existiert er, ist er das Tor
-     * zum Abschluss der Lektion (ersetzt das manuelle "Als erledigt markieren").
-     */
-    public function quiz(): HasOne
-    {
-        return $this->hasOne(RegimenQuiz::class, 'regimen_session_id');
     }
 }

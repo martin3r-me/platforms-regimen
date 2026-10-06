@@ -117,10 +117,6 @@ class RegimenServiceProvider extends ServiceProvider
             $registry->register(new \Platform\Regimen\Tools\UpdateRegimenSessionTool());
             $registry->register(new \Platform\Regimen\Tools\DeleteRegimenSessionTool());
 
-            // Quizzes ("Concept-Checks") — gaten den Lektions-Abschluss
-            $registry->register(new \Platform\Regimen\Tools\GetRegimenQuizTool());
-            $registry->register(new \Platform\Regimen\Tools\UpsertRegimenQuizTool());
-            $registry->register(new \Platform\Regimen\Tools\DeleteRegimenQuizTool());
 
             // Plans + pivot
             $registry->register(new \Platform\Regimen\Tools\ListRegimenPlansTool());

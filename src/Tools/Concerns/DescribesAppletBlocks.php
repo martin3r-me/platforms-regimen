@@ -4,7 +4,7 @@ namespace Platform\Regimen\Tools\Concerns;
 
 /**
  * Shared documentation for interactive applet blocks in Regimen Markdown
- * content (sessions + quiz prompts). Kept in one place so every content-writing
+ * content (sessions). Kept in one place so every content-writing
  * tool advertises the exact same convention to authors / LLMs.
  *
  * Rendering lives in {@see \Platform\Regimen\Services\RegimenMarkdownService}:

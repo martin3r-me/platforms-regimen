@@ -8,17 +8,10 @@ use Platform\Regimen\Models\RegimenSession;
 use Platform\Regimen\Services\RegimenEnrollmentService;
 use Platform\Regimen\Services\RegimenMarkdownService;
 use Platform\Regimen\Services\RegimenProgressService;
-use Platform\Regimen\Services\RegimenQuizService;
 
 class Show extends Component
 {
     public string $uuid;
-
-    /** @var array<int, mixed> question_id => option_id (single) | [option_id,...] (multiple) */
-    public array $quizAnswers = [];
-
-    /** Ergebnis des letzten Auswertens (null = noch nicht abgegeben). */
-    public ?array $quizResult = null;
 
     public function mount(string $uuid): void
     {
@@ -30,11 +23,6 @@ class Show extends Component
         $user = Auth::user();
         $session = $this->resolveSession($user);
 
-        // Manueller Abschluss nur fuer Einheiten ohne Concept-Check.
-        if ($session->quiz()->exists()) {
-            return;
-        }
-
         app(RegimenProgressService::class)->complete($user->id, $session);
     }
 
@@ -43,36 +31,6 @@ class Show extends Component
         $user = Auth::user();
         $session = $this->resolveSession($user);
         app(RegimenProgressService::class)->reopen($user->id, $session);
-        $this->quizResult = null;
-        $this->quizAnswers = [];
-    }
-
-    public function submitQuiz(): void
-    {
-        $user = Auth::user();
-        $session = $this->resolveSession($user);
-        $quiz = $session->quiz()->with('questions.options')->first();
-
-        if (!$quiz || $quiz->questions->isEmpty()) {
-            return;
-        }
-
-        // Antworten normalisieren: alles zu Listen von Option-IDs.
-        $answers = [];
-        foreach ($quiz->questions as $question) {
-            $raw = $this->quizAnswers[$question->id] ?? [];
-            $ids = is_array($raw) ? $raw : [$raw];
-            $answers[$question->id] = array_values(array_filter(array_map('intval', $ids)));
-        }
-
-        $outcome = app(RegimenQuizService::class)->submit($user->id, $quiz, $answers);
-        $this->quizResult = $outcome['result'];
-    }
-
-    public function retryQuiz(): void
-    {
-        $this->quizAnswers = [];
-        $this->quizResult = null;
     }
 
     public function startIfNeeded(): void
@@ -100,37 +58,6 @@ class Show extends Component
 
         $markdown = app(RegimenMarkdownService::class);
         $renderedContent = $markdown->render($session->content);
-
-        // Concept-Check dieser Einheit (optional). Existiert er, gatet er den Abschluss.
-        $quiz = $session->quiz()->with('questions.options')->first();
-        $quizQuestions = [];
-        if ($quiz && $quiz->questions->isNotEmpty()) {
-            foreach ($quiz->questions as $question) {
-                $quizQuestions[] = [
-                    'id' => $question->id,
-                    'type' => $question->type,
-                    'is_multiple' => $question->isMultiple(),
-                    'prompt_html' => $markdown->render($question->prompt),
-                    'explanation_html' => $question->explanation ? $markdown->render($question->explanation) : null,
-                    'options' => $question->options->map(fn ($o) => [
-                        'id' => $o->id,
-                        'label' => $o->label,
-                    ])->all(),
-                ];
-            }
-        }
-        $hasQuiz = $quizQuestions !== [];
-
-        // Checkbox-Bindung braucht fuer Mehrfach-Fragen ein Array als Startwert — sonst
-        // behandelt Livewire die Checkboxen als Boolean und hakt beim ersten Klick alle
-        // Optionen derselben Frage an. Single-Fragen bekommen einen Skalar-Startwert.
-        if ($hasQuiz && $this->quizResult === null) {
-            foreach ($quiz->questions as $question) {
-                if (!array_key_exists($question->id, $this->quizAnswers)) {
-                    $this->quizAnswers[$question->id] = $question->isMultiple() ? [] : '';
-                }
-            }
-        }
 
         $topicSessions = $session->topic->publishedSessions()->get(['id', 'uuid', 'title', 'sort_order']);
 
@@ -197,10 +124,6 @@ class Show extends Component
             'completedSet' => $completedSet,
             'planMemberships' => $planMemberships,
             'accentColor' => $accentColor,
-            'hasQuiz' => $hasQuiz,
-            'quiz' => $quiz,
-            'quizQuestions' => $quizQuestions,
-            'quizResult' => $this->quizResult,
         ])->layout('platform::layouts.app');
     }
 
